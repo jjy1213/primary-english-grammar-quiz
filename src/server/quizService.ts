@@ -30,6 +30,7 @@ function toPublicQuestion(question: Question): PublicQuestion {
     sourceType: question.sourceType,
     stem: question.stem,
     options: question.options,
+    wordBox: question.wordBox,
     gradeBand: question.gradeBand,
     examSource: question.examSource,
     knowledgePointId: question.knowledgePointId,
@@ -45,7 +46,14 @@ function toQuizQuestionPayload(question: Question, knowledgePoint: KnowledgePoin
 }
 
 function normalizeAnswer(value: string): string {
-  return value.trim().toLowerCase();
+  return value.trim().toLowerCase().replace(/\s*,\s*/g, " ").replace(/\s+/g, " ");
+}
+
+function getAcceptedAnswers(answer: string) {
+  return answer
+    .split("/")
+    .map(normalizeAnswer)
+    .filter(Boolean);
 }
 
 function getChoiceAnswerLabel(question: Question, answer: string) {
@@ -66,9 +74,9 @@ function getChoiceAnswerLabel(question: Question, answer: string) {
 
 function isAnswerCorrect(question: Question, userAnswer: string) {
   const normalizedUserAnswer = normalizeAnswer(userAnswer);
-  const normalizedStoredAnswer = normalizeAnswer(question.answer);
+  const normalizedStoredAnswers = getAcceptedAnswers(question.answer);
 
-  if (normalizedUserAnswer === normalizedStoredAnswer) {
+  if (normalizedStoredAnswers.includes(normalizedUserAnswer)) {
     return true;
   }
 

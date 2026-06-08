@@ -1,1 +1,380 @@
-[]
+[
+  {
+    "id": "bebd0bb7-d6a2-490d-a39e-9b2824d97d4d",
+    "submittedAt": "2026-06-08T15:33:51.588Z",
+    "questionId": "sh-2013-part2-choice-48",
+    "userAnswer": "take",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-nonfinite"
+  },
+  {
+    "id": "6170ad62-735c-4022-9229-a8e16a02e485",
+    "submittedAt": "2026-06-08T15:34:01.736Z",
+    "questionId": "sh-2019-part2-choice-30",
+    "userAnswer": "What a",
+    "isCorrect": false,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-exclamation"
+  },
+  {
+    "id": "d3dfd6e7-783c-4a10-a6ec-76b741353224",
+    "submittedAt": "2026-06-08T15:34:24.884Z",
+    "questionId": "sh-2014-part2-choice-44",
+    "userAnswer": "Sure. I will",
+    "isCorrect": true,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "46de1431-d590-48b3-b450-0ca5ba38f16f",
+    "submittedAt": "2026-06-08T15:34:46.202Z",
+    "questionId": "sh-2014-part2-choice-37",
+    "userAnswer": "since",
+    "isCorrect": false,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-conjunction"
+  },
+  {
+    "id": "7fe08b09-7b2d-40ec-ac0c-b439c8d8eb54",
+    "submittedAt": "2026-06-08T15:35:22.275Z",
+    "questionId": "sh-2011-part2-choice-40",
+    "userAnswer": "have collected",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "a2cfc5dd-3053-415f-bb6b-92ea7de65bb0",
+    "submittedAt": "2026-06-08T15:35:55.215Z",
+    "questionId": "sh-2009-part2-choice-40",
+    "userAnswer": "have told",
+    "isCorrect": true,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-nonfinite"
+  },
+  {
+    "id": "3ba9c5c8-fce2-42cc-ae93-6a98979c9019",
+    "submittedAt": "2026-06-08T15:36:19.826Z",
+    "questionId": "sh-2015-part2-choice-43",
+    "userAnswer": "Which",
+    "isCorrect": false,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-exclamation"
+  },
+  {
+    "id": "41212081-59d6-4266-a4a1-8990d94c0bed",
+    "submittedAt": "2026-06-08T15:36:24.814Z",
+    "questionId": "sh-2014-part2-choice-33",
+    "userAnswer": "serious",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-comparative"
+  },
+  {
+    "id": "e44be611-4a3d-40e8-8642-6e33117137a0",
+    "submittedAt": "2026-06-08T15:36:27.685Z",
+    "questionId": "sh-2014-part2-choice-39",
+    "userAnswer": "What an",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-exclamation"
+  },
+  {
+    "id": "ec70df03-58f5-40fe-aff7-19cdbfb4b5f6",
+    "submittedAt": "2026-06-08T15:36:31.225Z",
+    "questionId": "sh-2016-part2-choice-42",
+    "userAnswer": "am",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-passive-voice"
+  },
+  {
+    "id": "027ef2af-0fbb-4805-8015-48f5a668ab42",
+    "submittedAt": "2026-06-08T15:36:34.135Z",
+    "questionId": "sh-2009-part2-choice-50",
+    "userAnswer": "powerful",
+    "isCorrect": false,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-mixed"
+  },
+  {
+    "id": "0dbc74c8-1e24-43f2-958d-e744b3fa2c71",
+    "submittedAt": "2026-06-08T15:36:37.214Z",
+    "questionId": "sh-2009-part2-choice-38",
+    "userAnswer": "well",
+    "isCorrect": false,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-adjective-adverb"
+  },
+  {
+    "id": "981191f3-9a68-4bf4-8802-2a5574396fef",
+    "submittedAt": "2026-06-08T15:36:40.235Z",
+    "questionId": "sh-2014-part2-choice-42",
+    "userAnswer": "open",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-nonfinite"
+  },
+  {
+    "id": "36b6174d-b4ae-4d14-bafb-8b268522a91f",
+    "submittedAt": "2026-06-08T15:36:47.403Z",
+    "questionId": "sh-2011-part2-choice-36",
+    "userAnswer": "faster",
+    "isCorrect": true,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-comparative"
+  },
+  {
+    "id": "58b19f05-7ef9-4274-88ae-8caa1297d28b",
+    "submittedAt": "2026-06-08T15:36:53.443Z",
+    "questionId": "sh-2010-part2-choice-45",
+    "userAnswer": "can",
+    "isCorrect": false,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-modal"
+  },
+  {
+    "id": "7bb77edf-e5db-4f79-81b7-20f113ec84ca",
+    "submittedAt": "2026-06-08T15:37:07.562Z",
+    "questionId": "sh-2011-part2-choice-43",
+    "userAnswer": "is interviewed",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-passive-voice"
+  },
+  {
+    "id": "f47d463c-be9f-4baf-9346-fbedfc628918",
+    "submittedAt": "2026-06-08T15:37:18.705Z",
+    "questionId": "sh-2019-part2-choice-41",
+    "userAnswer": "but",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-conjunction"
+  },
+  {
+    "id": "5116b373-3f78-43a3-814b-7bb6aadaad31",
+    "submittedAt": "2026-06-08T15:37:21.921Z",
+    "questionId": "sh-2009-part2-choice-32",
+    "userAnswer": "at",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-preposition"
+  },
+  {
+    "id": "72829dbf-24a6-4c5e-bb61-434e8ed07612",
+    "submittedAt": "2026-06-08T15:39:13.024Z",
+    "questionId": "sh-2013-part2-choice-46",
+    "userAnswer": "have made",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "dfb5f764-6bd5-444c-aff7-f1a1c5ffa1ca",
+    "submittedAt": "2026-06-08T15:39:17.391Z",
+    "questionId": "sh-2011-part2-choice-42",
+    "userAnswer": "moved",
+    "isCorrect": false,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "98cef63f-bdb0-420e-b236-6e23e7d74270",
+    "submittedAt": "2026-06-08T15:39:26.341Z",
+    "questionId": "sh-2011-part2-choice-52",
+    "userAnswer": "moved",
+    "isCorrect": false,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "000da0db-544d-4598-9a0b-6774681a7ada",
+    "submittedAt": "2026-06-08T15:39:30.868Z",
+    "questionId": "sh-2009-part2-choice-52",
+    "userAnswer": "be late for",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "1e822f9d-887b-41c2-aec0-0f000026062a",
+    "submittedAt": "2026-06-08T15:39:42.280Z",
+    "questionId": "sh-2008-part2-choice-42",
+    "userAnswer": "have become",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "c411e144-7dfc-4625-ab58-7304eb5f8524",
+    "submittedAt": "2026-06-08T15:40:11.584Z",
+    "questionId": "sh-2011-part2-choice-40",
+    "userAnswer": "collect",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "560773ae-0930-49b7-8bd7-e537249a4ea5",
+    "submittedAt": "2026-06-08T15:40:15.471Z",
+    "questionId": "sh-2014-part2-choice-41",
+    "userAnswer": "has stayed",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "629299c4-9ba7-4915-892d-2eed08a43fd9",
+    "submittedAt": "2026-06-08T15:40:18.799Z",
+    "questionId": "sh-2016-part2-choice-38",
+    "userAnswer": "buy",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "65a130e2-1fec-4a8f-bb1f-29e720bcc377",
+    "submittedAt": "2026-06-08T15:40:25.284Z",
+    "questionId": "sh-2014-part2-choice-38",
+    "userAnswer": "would come",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "80f345aa-3263-4e1b-9f40-86f6cc5f422c",
+    "submittedAt": "2026-06-08T15:40:28.967Z",
+    "questionId": "sh-2011-part2-choice-41",
+    "userAnswer": "will ride",
+    "isCorrect": false,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "be48b1ad-b4ea-48d4-a42b-e333effa499e",
+    "submittedAt": "2026-06-08T15:41:54.292Z",
+    "questionId": "sh-2018-part2-cloze-64",
+    "userAnswer": "talked",
+    "isCorrect": false,
+    "correctAnswer": "be held",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "c2a5bdfd-f547-4e10-b89e-39b83a7802b3",
+    "submittedAt": "2026-06-08T15:42:27.858Z",
+    "questionId": "sh-2016-part2-cloze-67",
+    "userAnswer": "when will",
+    "isCorrect": false,
+    "correctAnswer": "when, would",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "3c4c4c57-64fd-406d-b068-65d586503fac",
+    "submittedAt": "2026-06-08T15:48:15.160Z",
+    "questionId": "sh-2008-part2-cloze-56",
+    "userAnswer": "pardon",
+    "isCorrect": false,
+    "correctAnswer": "again",
+    "knowledgePointId": "kp-word-formation"
+  },
+  {
+    "id": "f61ae917-552d-4518-864f-3be4b36ab18d",
+    "submittedAt": "2026-06-08T15:48:40.177Z",
+    "questionId": "sh-2014-part2-cloze-53",
+    "userAnswer": "idea",
+    "isCorrect": false,
+    "correctAnswer": "advice",
+    "knowledgePointId": "kp-word-formation"
+  },
+  {
+    "id": "6dbb45cd-e3cc-44e8-80b8-49557917f18b",
+    "submittedAt": "2026-06-08T15:56:09.291Z",
+    "questionId": "sh-2014-part2-cloze-68",
+    "userAnswer": "are,doing",
+    "isCorrect": false,
+    "correctAnswer": "The students are doing an experiment in the lab.",
+    "knowledgePointId": "kp-sentence-transformation"
+  },
+  {
+    "id": "be461682-42f4-450b-bd11-1b81a6d82055",
+    "submittedAt": "2026-06-08T15:56:44.499Z",
+    "questionId": "sh-2017-part2-cloze-67",
+    "userAnswer": "harmful,to",
+    "isCorrect": false,
+    "correctAnswer": "bad for/harmful to",
+    "knowledgePointId": "kp-sentence-transformation"
+  },
+  {
+    "id": "c12ccd1b-3a69-4a78-af7b-b3a7a6a23e70",
+    "submittedAt": "2026-06-08T15:57:32.197Z",
+    "questionId": "sh-2016-part2-cloze-58",
+    "userAnswer": "could",
+    "isCorrect": false,
+    "correctAnswer": "Wisdom",
+    "knowledgePointId": "kp-word-formation"
+  },
+  {
+    "id": "9b770f6a-1a2b-4596-b4ba-91debb0a6415",
+    "submittedAt": "2026-06-08T15:57:58.238Z",
+    "questionId": "sh-2011-part2-cloze-57",
+    "userAnswer": "eleventh",
+    "isCorrect": true,
+    "correctAnswer": "eleventh",
+    "knowledgePointId": "kp-word-formation"
+  },
+  {
+    "id": "0b995cdf-5d9f-4902-89d0-7fe6f66b036b",
+    "submittedAt": "2026-06-08T15:58:53.959Z",
+    "questionId": "sh-2019-part2-cloze-67",
+    "userAnswer": "to fell",
+    "isCorrect": false,
+    "correctAnswer": "if/whether, was",
+    "knowledgePointId": "kp-word-formation"
+  },
+  {
+    "id": "63dcc844-5241-4617-b93b-89f19678f6cd",
+    "submittedAt": "2026-06-08T16:03:09.599Z",
+    "questionId": "sh-2012-part2-cloze-70",
+    "userAnswer": "due to",
+    "isCorrect": false,
+    "correctAnswer": "enough to",
+    "knowledgePointId": "kp-sentence-transformation"
+  },
+  {
+    "id": "e1c1a6a1-7ffb-4edb-be50-706df9dbe1a7",
+    "submittedAt": "2026-06-08T16:03:43.957Z",
+    "questionId": "sh-2014-part2-cloze-59",
+    "userAnswer": "wood",
+    "isCorrect": true,
+    "correctAnswer": "wood",
+    "knowledgePointId": "kp-word-formation"
+  },
+  {
+    "id": "ee5f4d29-5018-47ce-9bc8-2c48a37087d3",
+    "submittedAt": "2026-06-08T16:05:12.577Z",
+    "questionId": "sh-2011-part2-cloze-65",
+    "userAnswer": "have keep",
+    "isCorrect": false,
+    "correctAnswer": "don't keep",
+    "knowledgePointId": "kp-sentence-transformation"
+  },
+  {
+    "id": "10abf4e6-b2ab-452b-84c0-d2777a301b86",
+    "submittedAt": "2026-06-08T16:05:57.567Z",
+    "questionId": "sh-2014-part2-cloze-47",
+    "userAnswer": "refused",
+    "isCorrect": true,
+    "correctAnswer": "refused",
+    "knowledgePointId": "kp-word-formation"
+  },
+  {
+    "id": "fbad09b2-0e15-467f-ab5f-13aa78748fe6",
+    "submittedAt": "2026-06-08T16:06:15.825Z",
+    "questionId": "sh-2014-part2-cloze-48",
+    "userAnswer": "mad",
+    "isCorrect": true,
+    "correctAnswer": "mad",
+    "knowledgePointId": "kp-word-formation"
+  }
+]

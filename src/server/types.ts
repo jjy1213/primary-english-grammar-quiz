@@ -16,6 +16,7 @@ export interface Question {
   sourceType: QuestionSourceType;
   stem: string;
   options?: string[];
+  wordBox?: string[];
   answer: string;
   gradeBand: string;
   examSource: string;
@@ -56,6 +57,7 @@ export interface PublicQuestion {
   sourceType: QuestionSourceType;
   stem: string;
   options?: string[];
+  wordBox?: string[];
   gradeBand: string;
   examSource: string;
   knowledgePointId: string;
@@ -99,6 +101,7 @@ export interface QuizSubmitResponse {
       stem: string;
       sourceType: QuestionSourceType;
       options?: string[];
+      wordBox?: string[];
       examSource: string;
       userAnswer: string;
       isCorrect: boolean;

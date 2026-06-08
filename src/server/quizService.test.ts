@@ -105,6 +105,37 @@ describe("quizService", () => {
     expect(result.isFinished).toBe(true);
   });
 
+  it("accepts slash alternatives and comma-separated blanks for cloze answers", () => {
+    const sourceQuestion = loadQuestions().find((item) => item.answer === "bad for/harmful to");
+
+    expect(sourceQuestion).toBeDefined();
+
+    const quiz = startQuiz({
+      mode: "knowledgePoint",
+      knowledgePointId: sourceQuestion!.knowledgePointId,
+      questionType: "cloze",
+      questionCount: 200
+    });
+
+    let current = quiz.currentQuestion!;
+    while (current.id !== sourceQuestion!.id) {
+      const result = submitQuizAnswer({
+        sessionId: quiz.sessionId,
+        questionId: current.id,
+        userAnswer: "wrong"
+      });
+      current = result.nextQuestion!;
+    }
+
+    const result = submitQuizAnswer({
+      sessionId: quiz.sessionId,
+      questionId: current.id,
+      userAnswer: "harmful,to"
+    });
+
+    expect(result.isCorrect).toBe(true);
+  });
+
   it("returns incorrect summary items when the answer is wrong", () => {
     const quiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-pronoun", questionCount: 1 });
     const current = quiz.currentQuestion!;

@@ -18,6 +18,7 @@ interface QuizQuestion {
   sourceType: QuestionSourceType;
   stem: string;
   options?: string[];
+  wordBox?: string[];
   gradeBand: string;
   examSource: string;
   knowledgePointId: string;
@@ -38,6 +39,7 @@ interface SummaryItem {
   stem: string;
   sourceType: QuestionSourceType;
   options?: string[];
+  wordBox?: string[];
   examSource: string;
   userAnswer: string;
   isCorrect: boolean;
@@ -75,6 +77,7 @@ interface PublicQuestion {
   id: string;
   sourceType: QuestionSourceType;
   stem: string;
+  wordBox?: string[];
   knowledgePointId: string;
   gradeBand: string;
   difficulty: string;
@@ -234,14 +237,41 @@ function clampQuestionCount(value: number, max: number) {
 }
 
 function normalizeAnswer(value: string) {
-  return value.trim().toLowerCase();
+  return value.trim().toLowerCase().replace(/\s*,\s*/g, " ").replace(/\s+/g, " ");
+}
+
+function getAcceptedAnswers(answer: string) {
+  return answer
+    .split("/")
+    .map(normalizeAnswer)
+    .filter(Boolean);
+}
+
+function countBlankSlots(stem: string) {
+  const matches = stem.match(/_{2,}/g);
+  return matches?.length ?? 0;
+}
+
+function getClozeAnswerHint(stem: string) {
+  const blankCount = countBlankSlots(stem);
+  const isWordBoxQuestion = /\(from the box\)/i.test(stem);
+
+  if (blankCount > 1) {
+    return `这题有 ${blankCount} 个空，请按顺序填写，并用英文逗号分隔，例如：am, is`;
+  }
+
+  if (isWordBoxQuestion) {
+    return "本题应从词框中选词作答。";
+  }
+
+  return "如果有多个空，请按顺序填写，并用英文逗号分隔，例如：am, is";
 }
 
 function isRetryAnswerCorrect(item: SummaryItem, userAnswer: string) {
   const normalizedUserAnswer = normalizeAnswer(userAnswer);
-  const normalizedStoredAnswer = normalizeAnswer(item.correctAnswer);
+  const normalizedStoredAnswers = getAcceptedAnswers(item.correctAnswer);
 
-  if (normalizedUserAnswer === normalizedStoredAnswer) {
+  if (normalizedStoredAnswers.includes(normalizedUserAnswer)) {
     return true;
   }
 
@@ -446,7 +476,9 @@ function App() {
   function renderAnswerInput(
     question: {
       sourceType: QuestionSourceType;
+      stem?: string;
       options?: string[];
+      wordBox?: string[];
     },
     value: string,
     onChange: (nextValue: string) => void
@@ -471,7 +503,19 @@ function App() {
     return (
       <label className="field">
         <span>请输入答案</span>
+        {question.wordBox?.length ? (
+          <div className="word-box" aria-label="词框">
+            {question.wordBox.map((word) => (
+              <button key={word} type="button" className="word-box-token" onClick={() => onChange(word)}>
+                {word}
+              </button>
+            ))}
+          </div>
+        ) : question.stem && /\(from the box\)/i.test(question.stem) ? (
+          <small className="answer-format-hint">当前题库暂未保存这题对应的词框内容。</small>
+        ) : null}
         <input value={value} onChange={(event) => onChange(event.target.value)} placeholder="在这里输入答案" />
+        {question.stem ? <small className="answer-format-hint">{getClozeAnswerHint(question.stem)}</small> : null}
       </label>
     );
   }

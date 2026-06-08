@@ -15,6 +15,7 @@ export const questionSchema = z
     sourceType: z.enum(["choice", "cloze"]),
     stem: z.string().min(1),
     options: z.array(z.string().min(1)).optional(),
+    wordBox: z.array(z.string().min(1)).optional(),
     answer: z.string().min(1),
     gradeBand: z.string().min(1),
     examSource: z.string().min(1),
