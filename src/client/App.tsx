@@ -272,6 +272,8 @@ function App() {
   const [submitting, setSubmitting] = useState(false);
   const [starting, setStarting] = useState(false);
   const [feedback, setFeedback] = useState<SubmitResponse | null>(null);
+  const [pendingNextQuestion, setPendingNextQuestion] = useState<QuizQuestion | null>(null);
+  const [pendingSummary, setPendingSummary] = useState<SubmitResponse["summary"] | null>(null);
   const [summary, setSummary] = useState<SubmitResponse["summary"] | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [retryIndex, setRetryIndex] = useState(0);
@@ -316,6 +318,8 @@ function App() {
     setStarting(true);
     setErrorMessage("");
     setFeedback(null);
+    setPendingNextQuestion(null);
+    setPendingSummary(null);
     setSummary(null);
     setRetryIndex(0);
     setRetryDraftAnswer("");
@@ -357,17 +361,14 @@ function App() {
       });
 
       setFeedback(result);
-      setDraftAnswer("");
+      setPendingNextQuestion(result.isFinished ? null : result.nextQuestion);
+      setPendingSummary(result.isFinished ? result.summary ?? null : null);
 
       if (result.isFinished) {
-        setCurrentQuestion(null);
-        setSummary(result.summary ?? null);
         setRetryIndex(0);
         setRetryDraftAnswer("");
         setRetryFeedback(null);
         setRetryResults({});
-      } else {
-        setCurrentQuestion(result.nextQuestion);
       }
     } catch (error) {
       setErrorMessage(getErrorMessage(error, "提交答案失败。"));
@@ -381,12 +382,28 @@ function App() {
     setCurrentQuestion(null);
     setDraftAnswer("");
     setFeedback(null);
+    setPendingNextQuestion(null);
+    setPendingSummary(null);
     setSummary(null);
     setErrorMessage("");
     setRetryIndex(0);
     setRetryDraftAnswer("");
     setRetryFeedback(null);
     setRetryResults({});
+  }
+
+  function handleContinueToNext() {
+    if (pendingSummary) {
+      setCurrentQuestion(null);
+      setSummary(pendingSummary);
+    } else if (pendingNextQuestion) {
+      setCurrentQuestion(pendingNextQuestion);
+    }
+
+    setDraftAnswer("");
+    setFeedback(null);
+    setPendingNextQuestion(null);
+    setPendingSummary(null);
   }
 
   function startRetryPractice() {
@@ -608,7 +625,11 @@ function App() {
 
               {currentQuestion.sourceType === "choice" ? <p className="hint-text">点击一个选项后再提交答案。</p> : null}
 
-              <button className="primary-action" type="submit" disabled={submitting || draftAnswer.trim() === ""}>
+              <button
+                className="primary-action"
+                type="submit"
+                disabled={submitting || draftAnswer.trim() === "" || feedback?.question.id === currentQuestion.id}
+              >
                 {submitting ? "提交中..." : "提交答案"}
               </button>
             </form>
@@ -641,6 +662,9 @@ function App() {
               <p>正确答案：{formatCorrectAnswer(feedback.correctAnswer, feedback.correctAnswerLabel)}</p>
               <p>考点：{feedback.knowledgePoint.name}</p>
               <p>讲解：{feedback.explanation}</p>
+              <button type="button" className="secondary-action retry-next-btn" onClick={handleContinueToNext}>
+                {pendingSummary ? "查看结果" : "下一题"}
+              </button>
             </div>
           ) : null}
         </section>
