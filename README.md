@@ -1,65 +1,76 @@
 # 小学生英语语法测试
 
-一个面向本地单用户场景的英语语法练习项目，既可以作为网页应用运行，也可以封装成 Windows 桌面应用。它把整理后的中考真题选择题和填空题转成适合小学生使用的练习题库，并在每次作答后立即返回正确答案、对应考点和简短讲解。
+一个独立的英语语法练习项目，面向本地单用户使用场景。项目支持 Web 运行，也支持封装成 Windows 桌面应用。
 
-## 项目目标
+首版核心目标：
 
-- 支持英语语法单题练习，而不是整张试卷模式
-- 每道题提交后立即给出反馈
-- 题库和知识库分离，便于后续持续扩展
-- 支持从整理后的真题资料继续导入题目
-- 本地保存练习记录，方便后续做错题分析或学习报告
-- 支持封装成可双击打开的桌面应用
+- 让学生按题库做英语语法练习
+- 每题提交后立即返回对错、正确答案、考点和简短讲解
+- 支持按考点筛题和随机练习
+- 把题库、答案、考点、导题中间产物分开管理，方便后续继续扩库
 
-## 当前功能
+## 当前已完成
 
+- Web 版前后端一体项目
+- Electron 桌面版壳子
+- 本地 JSON 题库与知识库读取
 - 随机练习
 - 按考点练习
 - 选择题作答
 - 填空题作答
-- 即时判题
-- 每题返回：
-  - 正确答案
-  - 所属考点
-  - 1 到 3 句简短讲解
-- 练习结束后生成结果汇总：
-  - 总题数
-  - 答对题数
-  - 正确率
-  - 错题列表
-  - 每道错题对应考点和讲解
-- 本地 JSON 持久化练习记录
-- Electron 桌面封装
+- 即时判题反馈
+- 结果汇总页
+- 本地作答记录保存
+- 上海中考英语题库整理链路
+- 2008-2021 年题库素材归档
+- 可导入系统的结构化题库 JSON
 
 ## 技术栈
 
 - 前端：React 18 + TypeScript + Vite
 - 后端：Express + TypeScript
 - 桌面封装：Electron
-- 校验：Zod
+- 数据校验：Zod
 - 测试：Vitest
-- 存储：本地 JSON 文件
+- 数据存储：本地 JSON 文件
 
-## 运行方式
+## 本地运行
 
-### 1. 安装依赖
+### 1. 环境要求
+
+- Windows
+- Node.js 18 或更高版本
+- npm 9 或更高版本
+
+先确认版本：
+
+```bash
+node -v
+npm -v
+```
+
+### 2. 安装依赖
+
+在项目根目录执行：
 
 ```bash
 npm install
 ```
 
-### 2. 启动网页开发环境
+### 3. 启动 Web 开发模式
 
 ```bash
 npm run dev
 ```
 
-启动后：
+启动后默认地址：
 
-- 前端地址：[http://localhost:4175](http://localhost:4175)
-- 后端地址：[http://localhost:4310](http://localhost:4310)
+- 前端：`http://localhost:4175`
+- 后端：`http://localhost:4310`
 
-### 3. 启动桌面开发环境
+适合日常开发、改界面、改接口、调题库。
+
+### 4. 启动桌面开发模式
 
 ```bash
 npm run dev:desktop
@@ -71,148 +82,259 @@ npm run dev:desktop
 - Vite 前端
 - Electron 桌面窗口
 
-### 4. 构建网页生产版本
+适合联调桌面壳、窗口行为和本地打包前验证。
+
+### 5. 构建 Web 生产版本
 
 ```bash
 npm run build
 ```
 
-### 5. 启动网页生产服务
+构建输出：
+
+- 前端静态文件到 `dist/`
+- 后端编译结果到 `dist/server/`
+
+### 6. 启动 Web 生产服务
 
 ```bash
 npm run start
 ```
 
-### 6. 本地启动桌面应用
+默认监听：
+
+- `http://localhost:4310`
+
+### 7. 本地启动桌面应用
+
+先构建：
+
+```bash
+npm run build
+npm run build:electron
+```
+
+然后启动：
 
 ```bash
 npm run start:desktop
 ```
 
-适合在本机直接测试 Electron 壳子。
-
-### 7. 打包 Windows 安装程序
+### 8. 打包 Windows 安装包
 
 ```bash
 npm run build:desktop
 ```
 
-打包完成后，安装包会输出到 `release/` 目录。
+默认打包输出目录：
 
-### 8. 运行测试
+- `release/`
+
+### 9. 运行测试
 
 ```bash
 npm test
 ```
 
+当前已验证通过：
+
+- `7` 个 Vitest 测试全部通过
+
+## 常用脚本
+
+| 命令 | 说明 |
+| --- | --- |
+| `npm run dev` | 启动 Web 开发模式 |
+| `npm run dev:server` | 单独启动后端监听 |
+| `npm run dev:client` | 单独启动前端 |
+| `npm run dev:desktop` | 启动桌面开发模式 |
+| `npm run build` | 构建 Web 生产版本 |
+| `npm run build:electron` | 编译 Electron 代码 |
+| `npm run build:desktop` | 构建并打包桌面安装包 |
+| `npm run start` | 启动生产后端 |
+| `npm run start:desktop` | 启动本地桌面应用 |
+| `npm test` | 运行测试 |
+
 ## 项目结构
 
 ```text
 primary-english-grammar-quiz/
-├─ data/
-│  ├─ attempts.json
-│  ├─ import-template.json
-│  ├─ knowledge-points.json
-│  └─ questions.json
-├─ src/
-│  ├─ client/
-│  │  ├─ App.tsx
-│  │  ├─ main.tsx
-│  │  └─ styles.css
-│  ├─ electron/
-│  │  ├─ main.ts
-│  │  └─ preload.ts
-│  └─ server/
-│     ├─ attemptStore.ts
-│     ├─ config.ts
-│     ├─ contentStore.ts
-│     ├─ fsUtils.ts
-│     ├─ index.ts
-│     ├─ quizService.ts
-│     ├─ quizService.test.ts
-│     ├─ types.ts
-│     └─ validation.ts
-├─ index.html
-├─ package.json
-├─ tsconfig.json
-├─ tsconfig.server.json
-├─ tsconfig.electron.json
-└─ vite.config.ts
+|-- data/
+|   |-- attempts.json
+|   |-- import-template.json
+|   |-- knowledge-points.json
+|   `-- questions.json
+|-- question-bank/
+|   |-- answers-text/
+|   |-- images/
+|   |-- json/
+|   |-- manual/
+|   |-- parsed/
+|   |-- questions-text/
+|   `-- raw-exams/
+|-- scripts/
+|   |-- enrich-knowledge-points.mjs
+|   |-- generate-legacy-overrides.mjs
+|   |-- generate-manual-overrides.mjs
+|   `-- process-question-bank.mjs
+|-- src/
+|   |-- client/
+|   |-- electron/
+|   `-- server/
+|-- package.json
+|-- tsconfig.server.json
+|-- tsconfig.electron.json
+`-- vite.config.ts
 ```
 
 ## 数据文件说明
 
 ### `data/questions.json`
 
-题库文件，保存实际用于练习的题目。
+运行时题库文件，前后端练习流程实际读取这里的数据。
 
-字段说明：
+当前状态：
 
-- `id`：题目唯一标识
-- `sourceType`：题型，`choice` 或 `cloze`
-- `stem`：题干
-- `options`：选择题选项，填空题可省略
-- `answer`：正确答案
-- `gradeBand`：年级段预留字段
-- `examSource`：真题来源
-- `knowledgePointId`：关联考点 ID
-- `explanation`：简短讲解
-- `difficulty`：难度预留字段
+- 总题数：`584`
+- 其中真实整理题：`578`
+- 兼容保留示例题：`6`
+
+主要字段：
+
+- `id`
+- `sourceType`：`choice` / `cloze`
+- `stem`
+- `options`
+- `answer`
+- `gradeBand`
+- `examSource`
+- `knowledgePointId`
+- `explanation`
+- `difficulty`
 
 ### `data/knowledge-points.json`
 
-知识库文件，保存考点定义。
+运行时知识库文件。
 
-字段说明：
+当前状态：
 
-- `id`：考点唯一标识
-- `name`：考点名称
-- `category`：考点分类
-- `description`：考点说明
-- `keywords`：关键词列表
-- `relatedPoints`：相关考点列表
+- 总考点数：`22`
+
+主要字段：
+
+- `id`
+- `name`
+- `category`
+- `description`
+- `keywords`
+- `relatedPoints`
 
 ### `data/attempts.json`
 
-本地练习记录文件，每次提交答案后都会追加一条记录。
+本地作答记录文件。每次提交答案后会追加记录。
+
+主要字段：
+
+- `id`
+- `submittedAt`
+- `questionId`
+- `userAnswer`
+- `isCorrect`
+- `correctAnswer`
+- `knowledgePointId`
 
 ### `data/import-template.json`
 
-后续从 Word/PDF 整理题目时使用的中间模板。首版不直接解析 Word/PDF，建议先人工整理成这个结构，再导入题库。
+后续人工整理 Word/PDF 题目时的导入模板。
 
-## 导题约定
+## 题库目录说明
 
-当前版本不做 Word/PDF 自动解析。推荐流程如下：
+`question-bank/` 是题库整理工作区，不是前端运行时直接读取目录。
 
-1. 从原始 Word 或 PDF 中整理出题目内容
-2. 按 `data/import-template.json` 的字段结构填充
-3. 补齐考点名称、考点 ID、正确答案和简短讲解
-4. 将整理后的内容转换到 `data/questions.json`
-5. 如果遇到新考点，同时补充 `data/knowledge-points.json`
+### 目录用途
 
-这样做的好处是：
+- `raw-exams/`
+  - 原始试卷文件
+- `parsed/`
+  - 原始文件转出的文本中间结果
+- `questions-text/`
+  - 拆分后的题目文本
+- `answers-text/`
+  - 拆分后的答案文本
+- `manual/`
+  - 人工补录和纠偏数据
+- `json/`
+  - 可导入系统的结构化产物
+- `images/`
+  - 无法直接抽文本时的图片辅助材料
 
-- 可控，避免自动解析错误
-- 便于人工校对答案和讲解
-- 方便后续扩展批量导题脚本或后台管理页
+### 当前结构化产物
+
+- `question-bank/json/import-ready-questions.json`
+  - `578` 题
+- `question-bank/json/answer-map.json`
+  - `578` 条题答对应关系
+- `question-bank/json/import-ready-knowledge-points.json`
+  - 导入用知识点结构
+- `question-bank/json/extraction-report.json`
+  - 抽取报告
+
+## 导题与扩库流程
+
+推荐后续继续按这条链路扩展：
+
+1. 把新的 Word/PDF 原始题放入 `question-bank/raw-exams/`
+2. 先整理出题目文本和答案文本
+3. 如自动抽取不稳定，在 `question-bank/manual/` 中补录
+4. 运行题库处理脚本
+5. 生成新的结构化 JSON
+6. 校验后同步到 `data/questions.json` 和 `data/knowledge-points.json`
+
+当前相关脚本：
+
+- `node scripts/process-question-bank.mjs`
+- `node scripts/generate-manual-overrides.mjs`
+- `node scripts/generate-legacy-overrides.mjs`
+- `node scripts/enrich-knowledge-points.mjs`
+
+## 练习规则
+
+### 选择题
+
+- 直接按答案文本匹配
+
+### 填空题
+
+- 忽略首尾空格
+- 忽略大小写
+
+当前首版暂不支持：
+
+- 同义答案
+- 多答案并列
+- 更复杂的语法变体判定
 
 ## API 接口
 
+### `GET /api/status`
+
+健康检查。
+
 ### `GET /api/knowledge-points`
 
-返回全部考点数据。
+返回全部考点。
 
 ### `GET /api/questions`
 
-返回题库题目。
+返回题目列表。
 
-支持查询参数：
+可选查询参数：
 
-- `knowledgePointId`：按考点筛题
+- `knowledgePointId`
 
 ### `POST /api/quiz/start`
 
-开始一轮练习。
+开始练习。
 
 请求示例：
 
@@ -228,14 +350,14 @@ primary-english-grammar-quiz/
 ```json
 {
   "mode": "knowledgePoint",
-  "knowledgePointId": "kp-be-verb",
+  "knowledgePointId": "kp-tense",
   "questionCount": 5
 }
 ```
 
 ### `POST /api/quiz/submit`
 
-提交当前题目的答案。
+提交单题答案。
 
 请求示例：
 
@@ -251,68 +373,142 @@ primary-english-grammar-quiz/
 
 - 是否答对
 - 正确答案
-- 所属考点
+- 对应考点
 - 简短讲解
 - 当前进度
 - 下一题
-- 若练习完成，则返回结果汇总
+- 完成时的结果汇总
 
 ### `GET /api/attempts/:id`
 
-按记录 ID 获取某次作答记录。
+按作答记录 ID 查询单条记录。
 
-## 判题规则
+## 交付说明
 
-### 选择题
+当前仓库已经包含以下可交付内容：
 
-- 直接按答案文本匹配
+### 1. 可运行项目源码
 
-### 填空题
+- Web 前端
+- Express 后端
+- Electron 桌面壳
 
-- 忽略首尾空格
-- 忽略大小写
-- 当前版本不支持同义答案、多答案或复杂语法变体判断
+### 2. 运行时数据
 
-## 测试覆盖
+- `data/questions.json`
+- `data/knowledge-points.json`
+- `data/attempts.json`
 
-当前测试已经覆盖以下场景：
+### 3. 题库整理工作区
 
-- 按考点筛题
-- 随机组卷
-- 选择题答对反馈
-- 填空题忽略大小写和首尾空格
-- 错题汇总生成
-- 练习记录写入本地文件
-- 题库与考点关联校验
+- 原始试卷
+- 题目文本
+- 答案文本
+- 人工补录
+- 结构化 JSON
+- 抽取报告
 
-## 桌面版说明
+### 4. 题库处理脚本
 
-桌面版由 Electron 承载，内部仍然使用现有的 React 前端和 Express 后端逻辑。
+- 自动整合中间产物
+- 生成导入格式
+- 扩充知识点
 
-打包后：
+### 5. 桌面打包能力
 
-- 前端页面由本地文件加载
-- 后端接口由应用内置服务提供
-- 题库和知识库按应用资源目录读取
-- 练习记录保存在用户本地目录
+- 支持本地编译 Electron
+- 支持打包 Windows 安装程序
 
-这意味着你后续扩题时，不需要重写应用本身，只要维护题库和知识库即可。
+## 适合怎么交付给别人
 
-## 后续可扩展方向
+### 方式一：交源码
 
-- 增加题库管理页
-- 增加批量导题脚本
-- 增加错题本视图
+适合继续开发的人。
+
+需要提供：
+
+- 整个仓库
+- Node.js 环境
+- README 运行说明
+
+### 方式二：交桌面安装包
+
+适合只使用、不开发的人。
+
+需要先在本机执行：
+
+```bash
+npm run build:desktop
+```
+
+然后把 `release/` 里的安装包交给对方。
+
+### 方式三：交题库数据
+
+适合后续继续维护题库的人。
+
+建议至少交这几部分：
+
+- `question-bank/raw-exams/`
+- `question-bank/questions-text/`
+- `question-bank/answers-text/`
+- `question-bank/manual/`
+- `question-bank/json/`
+
+## 故障排查
+
+### 1. `npm install` 失败
+
+先确认 Node.js 版本是否过低。
+
+```bash
+node -v
+```
+
+### 2. 前端页面打不开
+
+确认 `npm run dev` 是否已经成功启动，并检查：
+
+- `http://localhost:4175`
+- `http://localhost:4310/api/status`
+
+### 3. 桌面模式打不开
+
+先确认下面两个构建是否正常：
+
+```bash
+npm run build
+npm run build:electron
+```
+
+### 4. 题库新增后页面没变化
+
+这个项目运行时读取的是：
+
+- `data/questions.json`
+- `data/knowledge-points.json`
+
+如果你只改了 `question-bank/json/`，但没有同步到 `data/`，前端不会更新。
+
+## 后续建议
+
+- 增加题库管理页面
+- 增加错题本
+- 增加按年级筛题
+- 增加按难度筛题
 - 增加学习报告
-- 增加按年级和难度筛题
-- 增加考点统计图表
-- 增加账号体系和多用户记录
-- 增加桌面端自动更新
+- 增加批量导题界面
+- 增加多用户与账号体系
+- 增加数据库存储
 
-## 注意事项
+## 当前默认端口
 
-- 当前项目默认是本地单用户使用
-- 当前数据存储方式是本地 JSON，不适合高并发场景
-- 如果要部署到线上，建议下一步改成数据库存储
-- 如果后续题目量增大，建议补一个独立的导入脚本和管理后台
-- 打包桌面版前，建议先执行 `npm test` 和 `npm run build`
+- 前端开发端口：`4175`
+- 后端服务端口：`4310`
+
+如需修改，可调整环境变量：
+
+- `SERVER_PORT`
+- `CLIENT_ORIGIN`
+- `APP_ROOT`
+- `APP_DATA_ROOT`
