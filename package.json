@@ -2,6 +2,7 @@
   "name": "primary-english-grammar-quiz",
   "version": "0.1.0",
   "description": "Primary school English grammar quiz app with web and desktop support.",
+  "license": "MIT",
   "author": "jjy1213",
   "private": true,
   "type": "module",
