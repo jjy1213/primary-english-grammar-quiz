@@ -73,12 +73,12 @@ interface PublicQuestion {
 
 const api = {
   async getKnowledgePoints(): Promise<KnowledgePoint[]> {
-    const response = await fetch("/api/knowledge-points");
+    const response = await fetch(buildApiUrl("/api/knowledge-points"));
     return response.json();
   },
   async getQuestions(knowledgePointId?: string): Promise<PublicQuestion[]> {
     const query = knowledgePointId ? `?knowledgePointId=${encodeURIComponent(knowledgePointId)}` : "";
-    const response = await fetch(`/api/questions${query}`);
+    const response = await fetch(buildApiUrl(`/api/questions${query}`));
     return response.json();
   },
   async startQuiz(payload: {
@@ -86,7 +86,7 @@ const api = {
     knowledgePointId?: string;
     questionCount?: number;
   }): Promise<QuizStartResponse> {
-    const response = await fetch("/api/quiz/start", {
+    const response = await fetch(buildApiUrl("/api/quiz/start"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -103,7 +103,7 @@ const api = {
     questionId: string;
     userAnswer: string;
   }): Promise<SubmitResponse> {
-    const response = await fetch("/api/quiz/submit", {
+    const response = await fetch(buildApiUrl("/api/quiz/submit"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -116,6 +116,14 @@ const api = {
     return response.json();
   }
 };
+
+function buildApiUrl(path: string) {
+  if (window.location.protocol === "file:") {
+    return `http://127.0.0.1:4310${path}`;
+  }
+
+  return path;
+}
 
 function App() {
   const [knowledgePoints, setKnowledgePoints] = useState<KnowledgePoint[]>([]);

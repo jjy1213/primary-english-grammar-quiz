@@ -1,0 +1,256 @@
+[
+  {
+    "year": "2008",
+    "fileName": "2008年上海市初中毕业生统一学业考试英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 17468,
+    "answerTextLength": 4489,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 21,
+      "fillAnswers": 21,
+      "importedChoice": 20,
+      "importedFill": 21
+    },
+    "issues": [
+      "2008 年第二部分已按题面与答案页人工重建。"
+    ]
+  },
+  {
+    "year": "2009",
+    "fileName": "2009年上海中考英语试题及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 29751,
+    "answerTextLength": 0,
+    "extracted": {
+      "choiceQuestions": 26,
+      "choiceAnswers": 26,
+      "fillQuestions": 14,
+      "fillAnswers": 14,
+      "importedChoice": 26,
+      "importedFill": 14
+    },
+    "issues": [
+      "2009 年第二部分已按题面与答案解析人工重建。"
+    ]
+  },
+  {
+    "year": "2010",
+    "fileName": "2010年上海市初中毕业统一学业考试英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 19817,
+    "answerTextLength": 0,
+    "extracted": {
+      "choiceQuestions": 26,
+      "choiceAnswers": 26,
+      "fillQuestions": 14,
+      "fillAnswers": 14,
+      "importedChoice": 26,
+      "importedFill": 14
+    },
+    "issues": [
+      "2010 年第二部分已按题面与文末答案键人工重建。"
+    ]
+  },
+  {
+    "year": "2011",
+    "fileName": "2011年上海市初中毕业生统一学业考试英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 34317,
+    "answerTextLength": 0,
+    "extracted": {
+      "choiceQuestions": 26,
+      "choiceAnswers": 26,
+      "fillQuestions": 14,
+      "fillAnswers": 14,
+      "importedChoice": 26,
+      "importedFill": 14
+    },
+    "issues": [
+      "2011 年第二部分已按题面与文末答案键人工重建。"
+    ]
+  },
+  {
+    "year": "2012",
+    "fileName": "2012年上海市初中毕业统一学业考试英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 28559,
+    "answerTextLength": 0,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 23,
+      "fillAnswers": 23,
+      "importedChoice": 20,
+      "importedFill": 23
+    },
+    "issues": [
+      "2012 年第二部分已按题面与文末答案键人工重建。"
+    ]
+  },
+  {
+    "year": "2013",
+    "fileName": "2013年上海市中考英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 16560,
+    "answerTextLength": 1411,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 23,
+      "fillAnswers": 23,
+      "importedChoice": 20,
+      "importedFill": 23
+    },
+    "issues": [
+      "第二部分已按人工校准重建，覆盖自动抽取结果。"
+    ]
+  },
+  {
+    "year": "2014",
+    "fileName": "2014年上海市初中毕业统一考试英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 17962,
+    "answerTextLength": 0,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 23,
+      "fillAnswers": 23,
+      "importedChoice": 20,
+      "importedFill": 23
+    },
+    "issues": [
+      "2014 年第二部分已按题面与答案页人工重建。"
+    ]
+  },
+  {
+    "year": "2015",
+    "fileName": "2015年上海市中考英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 16142,
+    "answerTextLength": 935,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 23,
+      "fillAnswers": 23,
+      "importedChoice": 20,
+      "importedFill": 23
+    },
+    "issues": [
+      "第二部分已按人工校准重建，覆盖自动抽取结果。"
+    ]
+  },
+  {
+    "year": "2016",
+    "fileName": "2016年上海市中考英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 6973,
+    "answerTextLength": 486,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 23,
+      "fillAnswers": 23,
+      "importedChoice": 20,
+      "importedFill": 23
+    },
+    "issues": [
+      "已人工校准导入 2016 年 Part 2 全部选择题与填空题。"
+    ]
+  },
+  {
+    "year": "2017",
+    "fileName": "2017年上海市中考英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 14792,
+    "answerTextLength": 5306,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 23,
+      "fillAnswers": 23,
+      "importedChoice": 20,
+      "importedFill": 23
+    },
+    "issues": [
+      "第二部分已按人工校准重建，覆盖自动抽取结果。"
+    ]
+  },
+  {
+    "year": "2018",
+    "fileName": "2018年上海市中考英语试卷及答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 7356,
+    "answerTextLength": 490,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 23,
+      "fillAnswers": 23,
+      "importedChoice": 20,
+      "importedFill": 23
+    },
+    "issues": [
+      "已人工校准导入 2018 年 Part 2 全部选择题与填空题。"
+    ]
+  },
+  {
+    "year": "2019",
+    "fileName": "2019年上海市中考英语试卷和答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 14145,
+    "answerTextLength": 2663,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 23,
+      "fillAnswers": 23,
+      "importedChoice": 20,
+      "importedFill": 23
+    },
+    "issues": [
+      "第二部分已按人工校准重建，覆盖自动抽取结果。",
+      "2019 年完形填空原始选项框在转文本时缺损，题干按上下文人工整理。"
+    ]
+  },
+  {
+    "year": "2020",
+    "fileName": "2020年上海市中考英语试卷和答案.docx",
+    "answerHeadingFound": true,
+    "questionTextLength": 6475,
+    "answerTextLength": 463,
+    "extracted": {
+      "choiceQuestions": 20,
+      "choiceAnswers": 20,
+      "fillQuestions": 23,
+      "fillAnswers": 23,
+      "importedChoice": 20,
+      "importedFill": 23
+    },
+    "issues": [
+      "本年份通过图片人工补录生成，当前已完成 Part 2 选择题与填空题对应整理。"
+    ]
+  },
+  {
+    "year": "2021",
+    "fileName": "2021年上海市中考英语试卷和答案.txt",
+    "answerHeadingFound": true,
+    "questionTextLength": 5238,
+    "answerTextLength": 538,
+    "extracted": {
+      "choiceQuestions": 15,
+      "choiceAnswers": 15,
+      "fillQuestions": 15,
+      "fillAnswers": 15,
+      "importedChoice": 15,
+      "importedFill": 15
+    },
+    "issues": [
+      "已人工校准导入 Part 2 的 II、IV、V。",
+      "Part 2 的 III 选词填空在当前本地文本中缺少可靠词盒映射，暂未并入结构化 JSON。"
+    ]
+  }
+]

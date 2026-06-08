@@ -1,0 +1,13 @@
+image_name,width,height,guessed_role,notes
+image1.png,455,176,cover_header,试卷标题与考试说明头部
+image2.jpg,836,965,question_page,试卷第一页 听力与单选开头
+image3.jpg,836,1299,question_page,试卷正文页
+image4.jpg,848,1295,question_page,试卷正文页
+image5.jpg,860,1278,question_page,试卷正文页
+image6.jpg,828,1291,question_page,试卷正文页
+image7.jpg,828,1283,question_page,试卷正文页
+image8.jpg,828,1270,question_page,试卷正文页
+image9.jpg,836,1275,question_page,试卷正文页
+image10.jpg,820,1280,question_page_or_answer_page,需进一步确认是否仍为试卷末页
+image11.jpg,820,597,possible_answer_page,高度较短 疑似答案页或截断页
+image12.jpg,804,891,possible_answer_page,疑似答案页或补充页

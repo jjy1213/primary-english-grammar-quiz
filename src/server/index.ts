@@ -9,7 +9,7 @@ import { startQuizSchema, submitQuizSchema } from "./validation.js";
 ensureAppFiles();
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: appConfig.clientOrigin }));
 app.use(express.json());
 
 app.get("/api/status", (_req, res) => {
@@ -68,6 +68,16 @@ app.post("/api/quiz/submit", (req, res) => {
   }
 });
 
-app.listen(appConfig.serverPort, () => {
-  console.log(`Quiz API listening on http://localhost:${appConfig.serverPort}`);
-});
+export function createServer() {
+  return app;
+}
+
+export function startServer(port = appConfig.serverPort) {
+  return app.listen(port, () => {
+    console.log(`Quiz API listening on http://localhost:${port}`);
+  });
+}
+
+if (process.env.START_SERVER !== "false") {
+  startServer();
+}
