@@ -1,4 +1,7 @@
 node_modules/
 dist/
+release/
+release-desktop/
 *.tsbuildinfo
 verification-*.png
+src/server/*.js

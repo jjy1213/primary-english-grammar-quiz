@@ -1,16 +1,22 @@
 import path from "node:path";
 
-const root = process.cwd();
+const appRoot = process.env.APP_ROOT ? path.resolve(process.env.APP_ROOT) : process.cwd();
+const dataRoot = process.env.APP_DATA_ROOT
+  ? path.resolve(process.env.APP_DATA_ROOT)
+  : path.join(appRoot, "data");
 
 export const appConfig = {
-  serverPort: 4310,
-  defaultQuizSize: 5
+  serverPort: Number(process.env.SERVER_PORT ?? "4310"),
+  defaultQuizSize: 5,
+  clientOrigin: process.env.CLIENT_ORIGIN ?? "http://localhost:4175",
+  appRoot,
+  dataRoot
 };
 
 export const paths = {
-  root,
-  dataDir: path.join(root, "data"),
-  questions: path.join(root, "data", "questions.json"),
-  knowledgePoints: path.join(root, "data", "knowledge-points.json"),
-  attempts: path.join(root, "data", "attempts.json")
+  root: appRoot,
+  dataDir: dataRoot,
+  questions: path.join(dataRoot, "questions.json"),
+  knowledgePoints: path.join(dataRoot, "knowledge-points.json"),
+  attempts: path.join(dataRoot, "attempts.json")
 };

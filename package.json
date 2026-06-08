@@ -1,14 +1,23 @@
 {
   "name": "primary-english-grammar-quiz",
   "version": "0.1.0",
+  "description": "Primary school English grammar quiz app with web and desktop support.",
+  "author": "jjy1213",
   "private": true,
   "type": "module",
+  "main": "dist/electron/main.js",
   "scripts": {
     "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "tsx watch src/server/index.ts",
+    "dev:server:build": "tsc -p tsconfig.server.json --watch",
     "dev:client": "vite",
+    "dev:desktop": "concurrently \"npm:dev:server\" \"npm:dev:server:build\" \"npm:dev:client\" \"npm:dev:electron\"",
+    "dev:electron": "wait-on dist/server/index.js tcp:4310 http://127.0.0.1:4175 && cross-env APP_ROOT=. tsx src/electron/main.ts",
     "build": "vite build && tsc -p tsconfig.server.json",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build:desktop": "npm run build && npm run build:electron && electron-builder",
     "start": "node dist/server/index.js",
+    "start:desktop": "cross-env APP_ROOT=. electron .",
     "test": "vitest run"
   },
   "dependencies": {
@@ -27,9 +36,43 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.1.2",
+    "cross-env": "^10.0.0",
+    "electron": "^37.1.0",
+    "electron-builder": "^26.0.12",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.3",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "wait-on": "^8.0.3"
+  },
+  "build": {
+    "appId": "com.jjy1213.primaryenglishgrammarquiz",
+    "productName": "Primary English Grammar Quiz",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "data",
+        "to": "data"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }
