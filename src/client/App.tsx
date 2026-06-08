@@ -33,13 +33,14 @@ interface QuizStartResponse {
   currentQuestion: QuizQuestion | null;
 }
 
-interface SummaryIncorrectItem {
+interface SummaryItem {
   questionId: string;
   stem: string;
   sourceType: QuestionSourceType;
   options?: string[];
   examSource: string;
   userAnswer: string;
+  isCorrect: boolean;
   correctAnswer: string;
   correctAnswerLabel?: string;
   knowledgePointName: string;
@@ -66,7 +67,7 @@ interface SubmitResponse {
     totalQuestions: number;
     correctCount: number;
     accuracy: number;
-    incorrectItems: SummaryIncorrectItem[];
+    items: SummaryItem[];
   };
 }
 
@@ -78,6 +79,11 @@ interface PublicQuestion {
   gradeBand: string;
   difficulty: string;
   examSource: string;
+}
+
+interface RetryFeedback {
+  isCorrect: boolean;
+  userAnswer: string;
 }
 
 const api = {
@@ -176,6 +182,25 @@ function clampQuestionCount(value: number, max: number) {
   return Math.max(1, Math.min(value, Math.max(1, max)));
 }
 
+function normalizeAnswer(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function isRetryAnswerCorrect(item: SummaryItem, userAnswer: string) {
+  const normalizedUserAnswer = normalizeAnswer(userAnswer);
+  const normalizedStoredAnswer = normalizeAnswer(item.correctAnswer);
+
+  if (normalizedUserAnswer === normalizedStoredAnswer) {
+    return true;
+  }
+
+  if (item.sourceType === "choice" && item.correctAnswerLabel) {
+    return normalizedUserAnswer === normalizeAnswer(item.correctAnswerLabel);
+  }
+
+  return false;
+}
+
 function App() {
   const [knowledgePoints, setKnowledgePoints] = useState<KnowledgePoint[]>([]);
   const [questionCount, setQuestionCount] = useState(5);
@@ -191,6 +216,10 @@ function App() {
   const [feedback, setFeedback] = useState<SubmitResponse | null>(null);
   const [summary, setSummary] = useState<SubmitResponse["summary"] | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [retryIndex, setRetryIndex] = useState(0);
+  const [retryDraftAnswer, setRetryDraftAnswer] = useState("");
+  const [retryFeedback, setRetryFeedback] = useState<RetryFeedback | null>(null);
+  const [retryResults, setRetryResults] = useState<Record<string, RetryFeedback>>({});
 
   useEffect(() => {
     void api.getKnowledgePoints().then((items) => {
@@ -216,12 +245,22 @@ function App() {
   );
 
   const maxSelectableCount = Math.max(1, Math.min(20, questionPool.length || 1));
+  const wrongItems = useMemo(
+    () => summary?.items.filter((item) => !item.isCorrect) ?? [],
+    [summary]
+  );
+  const retryQuestion = wrongItems[retryIndex] ?? null;
+  const retryCorrectCount = Object.values(retryResults).filter((item) => item.isCorrect).length;
 
   async function handleStartQuiz() {
     setStarting(true);
     setErrorMessage("");
     setFeedback(null);
     setSummary(null);
+    setRetryIndex(0);
+    setRetryDraftAnswer("");
+    setRetryFeedback(null);
+    setRetryResults({});
 
     try {
       const response = await api.startQuiz({
@@ -263,6 +302,10 @@ function App() {
       if (result.isFinished) {
         setCurrentQuestion(null);
         setSummary(result.summary ?? null);
+        setRetryIndex(0);
+        setRetryDraftAnswer("");
+        setRetryFeedback(null);
+        setRetryResults({});
       } else {
         setCurrentQuestion(result.nextQuestion);
       }
@@ -280,6 +323,80 @@ function App() {
     setFeedback(null);
     setSummary(null);
     setErrorMessage("");
+    setRetryIndex(0);
+    setRetryDraftAnswer("");
+    setRetryFeedback(null);
+    setRetryResults({});
+  }
+
+  function startRetryPractice() {
+    setRetryIndex(0);
+    setRetryDraftAnswer("");
+    setRetryFeedback(null);
+    setRetryResults({});
+  }
+
+  function handleRetrySubmit(event: FormEvent) {
+    event.preventDefault();
+    if (!retryQuestion) {
+      return;
+    }
+
+    const result: RetryFeedback = {
+      isCorrect: isRetryAnswerCorrect(retryQuestion, retryDraftAnswer),
+      userAnswer: retryDraftAnswer
+    };
+
+    setRetryFeedback(result);
+    setRetryResults((current) => ({
+      ...current,
+      [retryQuestion.questionId]: result
+    }));
+  }
+
+  function moveToNextRetryQuestion() {
+    if (!retryQuestion) {
+      return;
+    }
+
+    setRetryFeedback(null);
+    const nextIndex = retryIndex + 1;
+    setRetryIndex(nextIndex);
+    const nextQuestionId = wrongItems[nextIndex]?.questionId;
+    setRetryDraftAnswer(nextQuestionId ? retryResults[nextQuestionId]?.userAnswer ?? "" : "");
+  }
+
+  function renderAnswerInput(
+    question: {
+      sourceType: QuestionSourceType;
+      options?: string[];
+    },
+    value: string,
+    onChange: (nextValue: string) => void
+  ) {
+    if (question.sourceType === "choice") {
+      return (
+        <div className="option-grid">
+          {question.options?.map((option) => (
+            <button
+              key={option}
+              type="button"
+              className={`option-btn ${value === option ? "active" : ""}`}
+              onClick={() => onChange(option)}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <label className="field">
+        <span>请输入答案</span>
+        <input value={value} onChange={(event) => onChange(event.target.value)} placeholder="在这里输入答案" />
+      </label>
+    );
   }
 
   return (
@@ -290,7 +407,7 @@ function App() {
       <header className="hero">
         <div className="hero-copy">
           <h1>小学生英语语法测试</h1>
-          <p>你现在可以自由选择做选择题、填空题，也可以自己决定这一轮做多少题。</p>
+          <p>现在可以自由选择做选择题或填空题，也可以自己决定这一轮练习做多少题。</p>
         </div>
         <div className="hero-card">
           <span>题库独立维护</span>
@@ -405,46 +522,18 @@ function App() {
               </div>
               <h3>{currentQuestion.stem}</h3>
 
-              {currentQuestion.sourceType === "choice" ? (
-                <div className="option-grid">
-                  {currentQuestion.options?.map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      className={`option-btn ${draftAnswer === option ? "active" : ""}`}
-                      onClick={() => setDraftAnswer(option)}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <label className="field">
-                  <span>请输入答案</span>
-                  <input
-                    value={draftAnswer}
-                    onChange={(event) => setDraftAnswer(event.target.value)}
-                    placeholder="在这里输入答案"
-                  />
-                </label>
-              )}
+              {renderAnswerInput(currentQuestion, draftAnswer, setDraftAnswer)}
 
-              {currentQuestion.sourceType === "choice" ? (
-                <p className="hint-text">点击一个选项后再提交答案。</p>
-              ) : null}
+              {currentQuestion.sourceType === "choice" ? <p className="hint-text">点击一个选项后再提交答案。</p> : null}
 
-              <button
-                className="primary-action"
-                type="submit"
-                disabled={submitting || draftAnswer.trim() === ""}
-              >
+              <button className="primary-action" type="submit" disabled={submitting || draftAnswer.trim() === ""}>
                 {submitting ? "提交中..." : "提交答案"}
               </button>
             </form>
           ) : (
             <div className="empty-card">
               <h3>{summary ? "本轮练习已完成" : "还没有开始练习"}</h3>
-              <p>{summary ? "可以查看结果，或者重新开始新一轮练习。" : "先在左侧选择模式、题型和题数后开始做题。"}</p>
+              <p>{summary ? "可以查看结果，或重新开始新一轮练习。" : "先在左侧选择模式、题型和题数后开始做题。"}</p>
               {(summary || sessionId) && (
                 <button type="button" className="secondary-action" onClick={resetQuiz}>
                   重新开始
@@ -478,7 +567,7 @@ function App() {
       <section className="panel summary-panel">
         <div className="panel-title">
           <h2>结果汇总</h2>
-          <p>完成练习后，这里会显示正确率、题目来源和错题考点。</p>
+          <p>完成练习后，这里会显示整轮全部题目的结果。</p>
         </div>
 
         {summary ? (
@@ -499,29 +588,119 @@ function App() {
             </div>
 
             <div className="mistake-list">
-              {summary.incorrectItems.length === 0 ? (
-                <div className="success-card">这一轮全部答对了，继续保持。</div>
+              {summary.items.map((item) => (
+                <article
+                  key={item.questionId}
+                  className={`mistake-card ${item.isCorrect ? "summary-correct" : "summary-incorrect"}`}
+                >
+                  <h3>{item.stem}</h3>
+                  <p>结果：{item.isCorrect ? "答对" : "答错"}</p>
+                  <p>题型：{getSourceTypeLabel(item.sourceType)}</p>
+                  <p>来源：{item.examSource}</p>
+                  {item.sourceType === "choice" && item.options?.length ? (
+                    <p>原选项：{item.options.join(" / ")}</p>
+                  ) : null}
+                  <p>你的答案：{item.userAnswer || "未填写"}</p>
+                  <p>正确答案：{formatCorrectAnswer(item.correctAnswer, item.correctAnswerLabel)}</p>
+                  <p>对应考点：{item.knowledgePointName}</p>
+                  <p>讲解：{item.explanation}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className="retry-panel">
+              <div className="retry-head">
+                <div>
+                  <h3>错题再练</h3>
+                  <p>把本轮做错的题单独拿出来，再练一遍。</p>
+                </div>
+                {wrongItems.length > 0 ? (
+                  <button type="button" className="secondary-action" onClick={startRetryPractice}>
+                    重新开始错题练习
+                  </button>
+                ) : null}
+              </div>
+
+              {wrongItems.length === 0 ? (
+                <div className="success-card">
+                  <h3>这轮没有错题</h3>
+                  <p>这一轮全部答对了，不需要进入错题练习。</p>
+                </div>
+              ) : retryQuestion ? (
+                <div className="retry-layout">
+                  <div className="summary-hero retry-stats">
+                    <article>
+                      <strong>{wrongItems.length}</strong>
+                      <span>错题总数</span>
+                    </article>
+                    <article>
+                      <strong>{retryIndex + 1}</strong>
+                      <span>当前进度</span>
+                    </article>
+                    <article>
+                      <strong>{retryCorrectCount}</strong>
+                      <span>再练答对</span>
+                    </article>
+                  </div>
+
+                  <form onSubmit={handleRetrySubmit} className="question-card compact">
+                    <div className="question-meta">
+                      <span>{getSourceTypeLabel(retryQuestion.sourceType)}</span>
+                      <span>{retryQuestion.knowledgePointName}</span>
+                      <span>{retryQuestion.examSource}</span>
+                    </div>
+                    <h3>{retryQuestion.stem}</h3>
+
+                    {renderAnswerInput(retryQuestion, retryDraftAnswer, setRetryDraftAnswer)}
+
+                    <button
+                      className="primary-action"
+                      type="submit"
+                      disabled={retryDraftAnswer.trim() === ""}
+                    >
+                      提交错题答案
+                    </button>
+                  </form>
+
+                  {retryFeedback ? (
+                    <div className={`feedback-card ${retryFeedback.isCorrect ? "correct" : "incorrect"}`}>
+                      <div className="feedback-head">
+                        <strong>{retryFeedback.isCorrect ? "这次答对了" : "这题还可以再记一记"}</strong>
+                        <span>
+                          {retryIndex + 1}/{wrongItems.length} 题
+                        </span>
+                      </div>
+                      {retryQuestion.sourceType === "choice" && retryQuestion.options?.length ? (
+                        <p>原选项：{retryQuestion.options.join(" / ")}</p>
+                      ) : null}
+                      <p>你的答案：{retryFeedback.userAnswer || "未填写"}</p>
+                      <p>正确答案：{formatCorrectAnswer(retryQuestion.correctAnswer, retryQuestion.correctAnswerLabel)}</p>
+                      <p>考点：{retryQuestion.knowledgePointName}</p>
+                      <p>讲解：{retryQuestion.explanation}</p>
+
+                      <button type="button" className="secondary-action retry-next-btn" onClick={moveToNextRetryQuestion}>
+                        {retryIndex + 1 >= wrongItems.length ? "完成错题练习" : "下一题"}
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
               ) : (
-                summary.incorrectItems.map((item) => (
-                  <article key={item.questionId} className="mistake-card">
-                    <h3>{item.stem}</h3>
-                    <p>题型：{getSourceTypeLabel(item.sourceType)}</p>
-                    <p>来源：{item.examSource}</p>
-                    {item.sourceType === "choice" && item.options?.length ? (
-                      <p>原选项：{item.options.join(" / ")}</p>
-                    ) : null}
-                    <p>你的答案：{item.userAnswer || "未填写"}</p>
-                    <p>正确答案：{formatCorrectAnswer(item.correctAnswer, item.correctAnswerLabel)}</p>
-                    <p>对应考点：{item.knowledgePointName}</p>
-                    <p>讲解：{item.explanation}</p>
-                  </article>
-                ))
+                <div className="success-card">
+                  <h3>错题练习完成</h3>
+                  <p>
+                    本轮错题共 {wrongItems.length} 题，再练答对 {retryCorrectCount} 题。
+                  </p>
+                  <button type="button" className="secondary-action" onClick={startRetryPractice}>
+                    再练一遍
+                  </button>
+                </div>
               )}
             </div>
           </div>
         ) : (
-          <div className="empty-card compact">
-            <p>完成一轮练习后，这里会自动生成结果报告。</p>
+          <div className="empty-card">
+            <h3>还没有结果</h3>
+            <p>完成一轮练习后，这里会显示总题数、正确率和每道题的明细。</p>
           </div>
         )}
       </section>

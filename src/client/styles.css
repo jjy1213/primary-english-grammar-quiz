@@ -308,6 +308,44 @@ button {
   gap: 18px;
 }
 
+.retry-panel {
+  display: grid;
+  gap: 18px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.68);
+  padding: 18px;
+}
+
+.retry-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.retry-head h3 {
+  margin: 0;
+}
+
+.retry-head p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.retry-layout {
+  display: grid;
+  gap: 16px;
+}
+
+.retry-stats {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.retry-next-btn {
+  margin-top: 12px;
+}
+
 .mistake-list {
   display: grid;
   gap: 14px;
@@ -319,6 +357,16 @@ button {
 
 .success-card {
   background: rgba(217, 242, 210, 0.72);
+}
+
+.mistake-card.summary-correct {
+  background: rgba(217, 242, 210, 0.62);
+  border-color: rgba(106, 166, 96, 0.28);
+}
+
+.mistake-card.summary-incorrect {
+  background: rgba(255, 226, 216, 0.82);
+  border-color: rgba(201, 103, 78, 0.24);
 }
 
 .error-box {
@@ -354,7 +402,14 @@ button {
   .option-grid,
   .stats-board,
   .summary-hero,
-  .mode-switch {
+  .mode-switch,
+  .retry-stats {
     grid-template-columns: 1fr;
+  }
+
+  .retry-head,
+  .feedback-head {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

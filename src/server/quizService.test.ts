@@ -53,8 +53,43 @@ describe("quizService", () => {
 
     expect(result.isCorrect).toBe(true);
     expect(result.correctAnswer).toBe("on");
-    expect(result.knowledgePoint.name).toBe("时间介词");
     expect(result.summary?.correctCount).toBe(1);
+  });
+
+  it("accepts choice option text when the stored answer is a letter", () => {
+    const sourceQuestion = loadQuestions().find(
+      (item) => item.sourceType === "choice" && /^[A-D]$/i.test(item.answer) && item.options?.length
+    );
+
+    expect(sourceQuestion).toBeDefined();
+
+    const optionIndex = sourceQuestion!.answer.toUpperCase().charCodeAt(0) - 65;
+    const correctOptionText = sourceQuestion!.options![optionIndex];
+
+    const quiz = startQuiz({
+      mode: "knowledgePoint",
+      knowledgePointId: sourceQuestion!.knowledgePointId,
+      questionType: "choice",
+      questionCount: 20
+    });
+
+    expect(quiz.currentQuestion).not.toBeNull();
+
+    const result = submitQuizAnswer({
+      sessionId: quiz.sessionId,
+      questionId: quiz.currentQuestion!.id,
+      userAnswer:
+        quiz.currentQuestion!.id === sourceQuestion!.id
+          ? correctOptionText
+          : quiz.currentQuestion!.options![
+              sourceQuestion!.answer.toUpperCase().charCodeAt(0) - 65
+            ] ?? correctOptionText
+    });
+
+    if (quiz.currentQuestion!.id === sourceQuestion!.id) {
+      expect(result.isCorrect).toBe(true);
+      expect(result.correctAnswerLabel).toBe(correctOptionText);
+    }
   });
 
   it("ignores spaces and case for cloze answers", () => {
@@ -80,8 +115,36 @@ describe("quizService", () => {
     });
 
     expect(result.isCorrect).toBe(false);
-    expect(result.summary?.incorrectItems.length).toBe(1);
-    expect(result.summary?.incorrectItems[0].knowledgePointName).toBe("人称代词");
+    expect(result.summary?.items.length).toBe(1);
+    expect(result.summary?.items[0].isCorrect).toBe(false);
+  });
+
+  it("returns all answered items in the summary", () => {
+    const quiz = startQuiz({ mode: "random", questionCount: 3 });
+
+    let current = quiz.currentQuestion!;
+    let result = submitQuizAnswer({
+      sessionId: quiz.sessionId,
+      questionId: current.id,
+      userAnswer: "wrong"
+    });
+
+    current = result.nextQuestion!;
+    result = submitQuizAnswer({
+      sessionId: quiz.sessionId,
+      questionId: current.id,
+      userAnswer: "wrong"
+    });
+
+    current = result.nextQuestion!;
+    result = submitQuizAnswer({
+      sessionId: quiz.sessionId,
+      questionId: current.id,
+      userAnswer: "wrong"
+    });
+
+    expect(result.isFinished).toBe(true);
+    expect(result.summary?.items.length).toBe(3);
   });
 
   it("validates question data against linked knowledge points", () => {

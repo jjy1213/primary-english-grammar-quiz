@@ -64,6 +64,22 @@ function getChoiceAnswerLabel(question: Question, answer: string) {
   return answer;
 }
 
+function isAnswerCorrect(question: Question, userAnswer: string) {
+  const normalizedUserAnswer = normalizeAnswer(userAnswer);
+  const normalizedStoredAnswer = normalizeAnswer(question.answer);
+
+  if (normalizedUserAnswer === normalizedStoredAnswer) {
+    return true;
+  }
+
+  const choiceAnswerLabel = getChoiceAnswerLabel(question, question.answer);
+  if (choiceAnswerLabel && normalizedUserAnswer === normalizeAnswer(choiceAnswerLabel)) {
+    return true;
+  }
+
+  return false;
+}
+
 function getQuestionMap() {
   return new Map(loadQuestions().map((item) => [item.id, item]));
 }
@@ -178,7 +194,7 @@ export function submitQuizAnswer(input: {
 
   const correctAnswerLabel = getChoiceAnswerLabel(question, question.answer);
 
-  const isCorrect = normalizeAnswer(input.userAnswer) === normalizeAnswer(question.answer);
+  const isCorrect = isAnswerCorrect(question, input.userAnswer);
   if (isCorrect) {
     session.correctCount += 1;
   }
@@ -206,20 +222,20 @@ export function submitQuizAnswer(input: {
 
   if (isFinished) {
     session.completedAt = new Date().toISOString();
-    const incorrectItems = session.questionIds
+    const items = session.questionIds
       .map((questionId) => questionMap.get(questionId)!)
       .map((item) => {
         const relatedAttempt = session.answers.find((answer) => answer.questionId === item.id);
         return { item, relatedAttempt };
       })
-      .filter((entry) => entry.relatedAttempt && !entry.relatedAttempt.isCorrect)
       .map((entry) => ({
         questionId: entry.item.id,
         stem: entry.item.stem,
         sourceType: entry.item.sourceType,
         options: entry.item.options,
         examSource: entry.item.examSource,
-        userAnswer: entry.relatedAttempt!.userAnswer,
+        userAnswer: entry.relatedAttempt?.userAnswer ?? "",
+        isCorrect: entry.relatedAttempt?.isCorrect ?? false,
         correctAnswer: entry.item.answer,
         correctAnswerLabel: getChoiceAnswerLabel(entry.item, entry.item.answer),
         knowledgePointName: knowledgeMap.get(entry.item.knowledgePointId)!.name,
@@ -230,7 +246,7 @@ export function submitQuizAnswer(input: {
       totalQuestions: session.questionIds.length,
       correctCount: session.correctCount,
       accuracy: Number(((session.correctCount / session.questionIds.length) * 100).toFixed(1)),
-      incorrectItems
+      items
     };
   } else {
     const next = questionMap.get(session.questionIds[session.currentIndex])!;

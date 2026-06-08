@@ -94,13 +94,14 @@ export interface QuizSubmitResponse {
     totalQuestions: number;
     correctCount: number;
     accuracy: number;
-    incorrectItems: Array<{
+    items: Array<{
       questionId: string;
       stem: string;
       sourceType: QuestionSourceType;
       options?: string[];
       examSource: string;
       userAnswer: string;
+      isCorrect: boolean;
       correctAnswer: string;
       correctAnswerLabel?: string;
       knowledgePointName: string;
