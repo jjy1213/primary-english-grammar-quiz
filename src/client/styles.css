@@ -230,6 +230,63 @@ button {
   color: var(--ink);
 }
 
+.count-slider-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.count-slider-head,
+.count-slider-scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.count-slider-head strong {
+  font-size: 1.4rem;
+}
+
+.count-slider-head span,
+.count-slider-scale span {
+  color: var(--muted);
+}
+
+.count-slider {
+  appearance: none;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffb25c 0%, #ffd59d 100%);
+  outline: none;
+}
+
+.count-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(84, 42, 0, 0.16);
+  background: #fffaf2;
+  box-shadow: 0 6px 16px rgba(217, 110, 20, 0.24);
+  cursor: ew-resize;
+}
+
+.count-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(84, 42, 0, 0.16);
+  border-radius: 50%;
+  background: #fffaf2;
+  box-shadow: 0 6px 16px rgba(217, 110, 20, 0.24);
+  cursor: ew-resize;
+}
+
 .stats-board,
 .summary-hero {
   display: grid;

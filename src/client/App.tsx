@@ -93,8 +93,8 @@ const quizModeOptions: Array<{ value: QuizMode; label: string }> = [
 
 const questionTypeOptions: Array<{ value: QuestionTypeFilter; label: string }> = [
   { value: "all", label: "混合题型" },
-  { value: "choice", label: "只做选择题" },
-  { value: "cloze", label: "只做填空题" }
+  { value: "choice", label: "选择题" },
+  { value: "cloze", label: "填空题" }
 ];
 
 const api = {
@@ -191,6 +191,14 @@ function clampQuestionCount(value: number, max: number) {
   }
 
   return Math.max(1, Math.min(value, Math.max(1, max)));
+}
+
+function getSliderValueFromCount(questionCount: number, max: number) {
+  return max - questionCount + 1;
+}
+
+function getCountFromSliderValue(sliderValue: number, max: number) {
+  return clampQuestionCount(max - sliderValue + 1, max);
 }
 
 function normalizeAnswer(value: string) {
@@ -498,13 +506,26 @@ function App() {
 
           <label className="field">
             <span>练习题数</span>
-            <input
-              type="number"
-              min={1}
-              max={maxSelectableCount}
-              value={questionCount}
-              onChange={(event) => setQuestionCount(clampQuestionCount(Number(event.target.value), maxSelectableCount))}
-            />
+            <div className="count-slider-card">
+              <div className="count-slider-head">
+                <strong>{questionCount} 题</strong>
+                <span>左增右减</span>
+              </div>
+              <input
+                className="count-slider"
+                type="range"
+                min={1}
+                max={maxSelectableCount}
+                value={getSliderValueFromCount(questionCount, maxSelectableCount)}
+                onChange={(event) =>
+                  setQuestionCount(getCountFromSliderValue(Number(event.target.value), maxSelectableCount))
+                }
+              />
+              <div className="count-slider-scale">
+                <span>{maxSelectableCount} 题</span>
+                <span>1 题</span>
+              </div>
+            </div>
             <small className="hint-text">可自定义题数，当前最多 {maxSelectableCount} 题</small>
           </label>
 
