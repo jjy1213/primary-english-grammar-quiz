@@ -1,5 +1,6 @@
 export type QuestionSourceType = "choice" | "cloze";
 export type QuizMode = "random" | "knowledgePoint";
+export type QuestionTypeFilter = "all" | QuestionSourceType;
 
 export interface KnowledgePoint {
   id: string;
@@ -37,6 +38,7 @@ export interface QuizSession {
   id: string;
   mode: QuizMode;
   knowledgePointId?: string;
+  questionType?: QuestionTypeFilter;
   questionIds: string[];
   currentIndex: number;
   correctCount: number;
@@ -67,6 +69,7 @@ export interface QuizQuestionPayload extends PublicQuestion {
 export interface QuizStartResponse {
   sessionId: string;
   mode: QuizMode;
+  questionType: QuestionTypeFilter;
   totalQuestions: number;
   currentQuestion: QuizQuestionPayload | null;
 }

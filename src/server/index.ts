@@ -23,7 +23,11 @@ app.get("/api/knowledge-points", (_req, res) => {
 app.get("/api/questions", (req, res) => {
   const knowledgePointId =
     typeof req.query.knowledgePointId === "string" ? req.query.knowledgePointId : undefined;
-  res.json(getQuestions(knowledgePointId));
+  const questionType =
+    req.query.questionType === "choice" || req.query.questionType === "cloze"
+      ? req.query.questionType
+      : "all";
+  res.json(getQuestions(knowledgePointId, questionType));
 });
 
 app.get("/api/attempts/:id", (req, res) => {

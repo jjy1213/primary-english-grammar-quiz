@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 
 type QuizMode = "random" | "knowledgePoint";
 type QuestionSourceType = "choice" | "cloze";
+type QuestionTypeFilter = "all" | QuestionSourceType;
 
 interface KnowledgePoint {
   id: string;
@@ -27,6 +28,7 @@ interface QuizQuestion {
 interface QuizStartResponse {
   sessionId: string;
   mode: QuizMode;
+  questionType: QuestionTypeFilter;
   totalQuestions: number;
   currentQuestion: QuizQuestion | null;
 }
@@ -76,14 +78,26 @@ const api = {
     const response = await fetch(buildApiUrl("/api/knowledge-points"));
     return response.json();
   },
-  async getQuestions(knowledgePointId?: string): Promise<PublicQuestion[]> {
-    const query = knowledgePointId ? `?knowledgePointId=${encodeURIComponent(knowledgePointId)}` : "";
+  async getQuestions(
+    knowledgePointId?: string,
+    questionType: QuestionTypeFilter = "all"
+  ): Promise<PublicQuestion[]> {
+    const searchParams = new URLSearchParams();
+    if (knowledgePointId) {
+      searchParams.set("knowledgePointId", knowledgePointId);
+    }
+    if (questionType !== "all") {
+      searchParams.set("questionType", questionType);
+    }
+
+    const query = searchParams.toString() ? `?${searchParams.toString()}` : "";
     const response = await fetch(buildApiUrl(`/api/questions${query}`));
     return response.json();
   },
   async startQuiz(payload: {
     mode: QuizMode;
     knowledgePointId?: string;
+    questionType?: QuestionTypeFilter;
     questionCount?: number;
   }): Promise<QuizStartResponse> {
     const response = await fetch(buildApiUrl("/api/quiz/start"), {
@@ -125,10 +139,33 @@ function buildApiUrl(path: string) {
   return path;
 }
 
+function getQuestionTypeLabel(questionType: QuestionTypeFilter) {
+  if (questionType === "choice") {
+    return "只做选择题";
+  }
+  if (questionType === "cloze") {
+    return "只做填空题";
+  }
+  return "混合题型";
+}
+
+function getSourceTypeLabel(sourceType: QuestionSourceType) {
+  return sourceType === "choice" ? "选择题" : "填空题";
+}
+
+function clampQuestionCount(value: number, max: number) {
+  if (!Number.isFinite(value)) {
+    return 1;
+  }
+
+  return Math.max(1, Math.min(value, Math.max(1, max)));
+}
+
 function App() {
   const [knowledgePoints, setKnowledgePoints] = useState<KnowledgePoint[]>([]);
   const [questionCount, setQuestionCount] = useState(5);
   const [mode, setMode] = useState<QuizMode>("random");
+  const [questionType, setQuestionType] = useState<QuestionTypeFilter>("all");
   const [selectedKnowledgePointId, setSelectedKnowledgePointId] = useState("");
   const [questionPool, setQuestionPool] = useState<PublicQuestion[]>([]);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -151,13 +188,19 @@ function App() {
 
   useEffect(() => {
     const knowledgePointId = mode === "knowledgePoint" ? selectedKnowledgePointId : undefined;
-    void api.getQuestions(knowledgePointId).then(setQuestionPool);
-  }, [mode, selectedKnowledgePointId]);
+    void api.getQuestions(knowledgePointId, questionType).then(setQuestionPool);
+  }, [mode, questionType, selectedKnowledgePointId]);
+
+  useEffect(() => {
+    setQuestionCount((current) => clampQuestionCount(current, questionPool.length || 1));
+  }, [questionPool.length]);
 
   const selectedKnowledgePoint = useMemo(
     () => knowledgePoints.find((item) => item.id === selectedKnowledgePointId) ?? null,
     [knowledgePoints, selectedKnowledgePointId]
   );
+
+  const maxSelectableCount = Math.max(1, Math.min(20, questionPool.length || 1));
 
   async function handleStartQuiz() {
     setStarting(true);
@@ -169,7 +212,8 @@ function App() {
       const response = await api.startQuiz({
         mode,
         knowledgePointId: mode === "knowledgePoint" ? selectedKnowledgePointId : undefined,
-        questionCount
+        questionType,
+        questionCount: clampQuestionCount(questionCount, maxSelectableCount)
       });
 
       setSessionId(response.sessionId);
@@ -190,14 +234,17 @@ function App() {
 
     setSubmitting(true);
     setErrorMessage("");
+
     try {
       const result = await api.submitAnswer({
         sessionId,
         questionId: currentQuestion.id,
         userAnswer: draftAnswer
       });
+
       setFeedback(result);
       setDraftAnswer("");
+
       if (result.isFinished) {
         setCurrentQuestion(null);
         setSummary(result.summary ?? null);
@@ -228,14 +275,12 @@ function App() {
       <header className="hero">
         <div className="hero-copy">
           <h1>小学生英语语法测试</h1>
-          <p>
-            用整理后的真题做练习，答完每一题立刻知道正确答案、所属考点和简短讲解。
-          </p>
+          <p>你现在可以自由选择做选择题、填空题，也可以自己决定这一轮做多少题。</p>
         </div>
         <div className="hero-card">
-          <span>题库独立</span>
-          <span>知识库可扩展</span>
-          <span>练习记录本地保存</span>
+          <span>题库独立维护</span>
+          <span>知识库可持续扩展</span>
+          <span>作答记录本地保存</span>
         </div>
       </header>
 
@@ -243,7 +288,7 @@ function App() {
         <section className="panel setup-panel">
           <div className="panel-title">
             <h2>开始练习</h2>
-            <p>先选择模式，再进入单题练习。</p>
+            <p>先选模式、题型和题数，再进入单题练习。</p>
           </div>
 
           <div className="mode-switch">
@@ -264,16 +309,11 @@ function App() {
           </div>
 
           <label className="field">
-            <span>练习题数</span>
-            <select
-              value={questionCount}
-              onChange={(event) => setQuestionCount(Number(event.target.value))}
-            >
-              {[3, 5, 6].map((count) => (
-                <option key={count} value={count}>
-                  {count} 题
-                </option>
-              ))}
+            <span>题型</span>
+            <select value={questionType} onChange={(event) => setQuestionType(event.target.value as QuestionTypeFilter)}>
+              <option value="all">混合题型</option>
+              <option value="choice">只做选择题</option>
+              <option value="cloze">只做填空题</option>
             </select>
           </label>
 
@@ -293,6 +333,18 @@ function App() {
             </label>
           ) : null}
 
+          <label className="field">
+            <span>练习题数</span>
+            <input
+              type="number"
+              min={1}
+              max={maxSelectableCount}
+              value={questionCount}
+              onChange={(event) => setQuestionCount(clampQuestionCount(Number(event.target.value), maxSelectableCount))}
+            />
+            <small className="hint-text">当前最多可选 {maxSelectableCount} 题</small>
+          </label>
+
           <div className="stats-board">
             <article>
               <strong>{knowledgePoints.length}</strong>
@@ -300,7 +352,7 @@ function App() {
             </article>
             <article>
               <strong>{questionPool.length}</strong>
-              <span>可用题目数</span>
+              <span>{getQuestionTypeLabel(questionType)}可用题数</span>
             </article>
           </div>
 
@@ -326,12 +378,13 @@ function App() {
         <section className="panel quiz-panel">
           <div className="panel-title">
             <h2>练习区</h2>
-            <p>单题作答，提交后立即查看反馈。</p>
+            <p>提交后会立即显示对错、正确答案、考点和讲解。</p>
           </div>
 
           {currentQuestion ? (
             <form onSubmit={handleSubmitAnswer} className="question-card">
               <div className="question-meta">
+                <span>{getSourceTypeLabel(currentQuestion.sourceType)}</span>
                 <span>{currentQuestion.knowledgePointName}</span>
                 <span>{currentQuestion.examSource}</span>
               </div>
@@ -365,14 +418,18 @@ function App() {
                 <p className="hint-text">点击一个选项后再提交答案。</p>
               ) : null}
 
-              <button className="primary-action" type="submit" disabled={submitting || draftAnswer.trim() === ""}>
+              <button
+                className="primary-action"
+                type="submit"
+                disabled={submitting || draftAnswer.trim() === ""}
+              >
                 {submitting ? "提交中..." : "提交答案"}
               </button>
             </form>
           ) : (
             <div className="empty-card">
               <h3>{summary ? "本轮练习已完成" : "还没有开始练习"}</h3>
-              <p>{summary ? "可以查看结果，或者重新开始新一轮练习。" : "先在左侧选择模式并开始做题。"}</p>
+              <p>{summary ? "可以查看结果，或者重新开始新一轮练习。" : "先在左侧选择模式、题型和题数后开始做题。"}</p>
               {(summary || sessionId) && (
                 <button type="button" className="secondary-action" onClick={resetQuiz}>
                   重新开始
@@ -389,6 +446,7 @@ function App() {
                   {feedback.progress.answered}/{feedback.progress.total} 题
                 </span>
               </div>
+              <p>题型：{getSourceTypeLabel(feedback.question.sourceType)}</p>
               <p>你的答案：{feedback.userAnswer || "未填写"}</p>
               <p>正确答案：{feedback.correctAnswer}</p>
               <p>考点：{feedback.knowledgePoint.name}</p>

@@ -44,6 +44,7 @@ export const knowledgePointListSchema = z.array(knowledgePointSchema);
 export const startQuizSchema = z.object({
   mode: z.enum(["random", "knowledgePoint"]),
   knowledgePointId: z.string().optional(),
+  questionType: z.enum(["all", "choice", "cloze"]).optional(),
   questionCount: z.number().int().min(1).max(20).optional()
 });
 

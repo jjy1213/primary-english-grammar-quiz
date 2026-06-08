@@ -8,6 +8,7 @@ import type {
   Question,
   QuizQuestionPayload,
   QuizSession,
+  QuestionTypeFilter,
   QuizStartResponse,
   QuizSubmitResponse
 } from "./types.js";
@@ -55,11 +56,21 @@ function getKnowledgeMap() {
   return new Map(loadKnowledgePoints().map((item) => [item.id, item]));
 }
 
-export function getQuestions(knowledgePointId?: string): PublicQuestion[] {
+function filterQuestions(
+  questions: Question[],
+  knowledgePointId?: string,
+  questionType: QuestionTypeFilter = "all"
+) {
+  return questions.filter((question) => {
+    const matchesKnowledgePoint = !knowledgePointId || question.knowledgePointId === knowledgePointId;
+    const matchesQuestionType = questionType === "all" || question.sourceType === questionType;
+    return matchesKnowledgePoint && matchesQuestionType;
+  });
+}
+
+export function getQuestions(knowledgePointId?: string, questionType: QuestionTypeFilter = "all"): PublicQuestion[] {
   const questions = loadQuestions();
-  return questions
-    .filter((question) => !knowledgePointId || question.knowledgePointId === knowledgePointId)
-    .map(toPublicQuestion);
+  return filterQuestions(questions, knowledgePointId, questionType).map(toPublicQuestion);
 }
 
 export function getKnowledgePoints() {
@@ -69,9 +80,11 @@ export function getKnowledgePoints() {
 export function startQuiz(input: {
   mode: "random" | "knowledgePoint";
   knowledgePointId?: string;
+  questionType?: QuestionTypeFilter;
   questionCount?: number;
 }): QuizStartResponse {
   const knowledgeMap = getKnowledgeMap();
+  const questionType = input.questionType ?? "all";
   let candidates = loadQuestions();
 
   if (input.mode === "knowledgePoint") {
@@ -81,7 +94,9 @@ export function startQuiz(input: {
     if (!knowledgeMap.has(input.knowledgePointId)) {
       throw new Error("Knowledge point not found.");
     }
-    candidates = candidates.filter((question) => question.knowledgePointId === input.knowledgePointId);
+    candidates = filterQuestions(candidates, input.knowledgePointId, questionType);
+  } else {
+    candidates = filterQuestions(candidates, undefined, questionType);
   }
 
   if (candidates.length === 0) {
@@ -93,6 +108,7 @@ export function startQuiz(input: {
     id: uuid(),
     mode: input.mode,
     knowledgePointId: input.knowledgePointId,
+    questionType,
     questionIds: limited.map((item) => item.id),
     currentIndex: 0,
     correctCount: 0,
@@ -107,6 +123,7 @@ export function startQuiz(input: {
   return {
     sessionId: session.id,
     mode: session.mode,
+    questionType,
     totalQuestions: session.questionIds.length,
     currentQuestion: toQuizQuestionPayload(firstQuestion, knowledgePoint)
   };

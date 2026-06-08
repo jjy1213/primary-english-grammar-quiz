@@ -24,10 +24,22 @@ describe("quizService", () => {
     expect(items.every((item) => item.knowledgePointId === "kp-be-verb")).toBe(true);
   });
 
+  it("filters questions by question type", () => {
+    const items = getQuestions(undefined, "choice");
+    expect(items.length).toBeGreaterThan(0);
+    expect(items.every((item) => item.sourceType === "choice")).toBe(true);
+  });
+
   it("starts a random quiz with requested question count", () => {
     const quiz = startQuiz({ mode: "random", questionCount: 3 });
     expect(quiz.totalQuestions).toBe(3);
     expect(quiz.currentQuestion).not.toBeNull();
+  });
+
+  it("starts a cloze-only quiz when question type is limited", () => {
+    const quiz = startQuiz({ mode: "random", questionType: "cloze", questionCount: 3 });
+    expect(quiz.totalQuestions).toBe(3);
+    expect(quiz.currentQuestion?.sourceType).toBe("cloze");
   });
 
   it("returns feedback for a correct choice answer", () => {
