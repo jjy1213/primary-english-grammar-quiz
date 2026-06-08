@@ -97,6 +97,46 @@ const questionTypeOptions: Array<{ value: QuestionTypeFilter; label: string }> =
   { value: "cloze", label: "填空题" }
 ];
 
+function getErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof Error && error.message) {
+    return error.message;
+  }
+
+  if (typeof error === "string" && error.trim()) {
+    return error;
+  }
+
+  return fallback;
+}
+
+async function readErrorMessage(response: Response, fallback: string) {
+  try {
+    const payload = await response.json();
+
+    if (typeof payload?.error === "string" && payload.error.trim()) {
+      return payload.error;
+    }
+
+    if (payload?.error?.fieldErrors) {
+      const messages = Object.values(payload.error.fieldErrors)
+        .flat()
+        .filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+
+      if (messages.length > 0) {
+        return messages.join("；");
+      }
+    }
+
+    if (payload?.error?.formErrors?.length) {
+      return payload.error.formErrors.join("；");
+    }
+  } catch {
+    return fallback;
+  }
+
+  return fallback;
+}
+
 const api = {
   async getKnowledgePoints(): Promise<KnowledgePoint[]> {
     const response = await fetch(buildApiUrl("/api/knowledge-points"));
@@ -131,7 +171,7 @@ const api = {
     });
 
     if (!response.ok) {
-      throw new Error((await response.json()).error ?? "无法开始练习。");
+      throw new Error(await readErrorMessage(response, "无法开始练习。"));
     }
 
     return response.json();
@@ -148,7 +188,7 @@ const api = {
     });
 
     if (!response.ok) {
-      throw new Error((await response.json()).error ?? "提交答案失败。");
+      throw new Error(await readErrorMessage(response, "提交答案失败。"));
     }
 
     return response.json();
@@ -294,7 +334,7 @@ function App() {
       setCurrentQuestion(response.currentQuestion);
       setDraftAnswer("");
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "无法开始练习。");
+      setErrorMessage(getErrorMessage(error, "无法开始练习。"));
     } finally {
       setStarting(false);
     }
@@ -330,7 +370,7 @@ function App() {
         setCurrentQuestion(result.nextQuestion);
       }
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "提交答案失败。");
+      setErrorMessage(getErrorMessage(error, "提交答案失败。"));
     } finally {
       setSubmitting(false);
     }
