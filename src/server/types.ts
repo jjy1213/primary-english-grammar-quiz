@@ -34,6 +34,13 @@ export interface AttemptRecord {
   knowledgePointId: string;
 }
 
+export interface UserAccount {
+  id: string;
+  username: string;
+  password: string;
+  displayName: string;
+}
+
 export interface QuizSession {
   id: string;
   mode: QuizMode;
@@ -107,5 +114,13 @@ export interface QuizSubmitResponse {
       knowledgePointName: string;
       explanation: string;
     }>;
+  };
+}
+
+export interface LoginResponse {
+  user: {
+    id: string;
+    username: string;
+    displayName: string;
   };
 }

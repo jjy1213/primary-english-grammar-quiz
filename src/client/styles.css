@@ -230,7 +230,10 @@ button {
   color: var(--ink);
 }
 
-.count-slider-card {
+.count-input-card,
+.login-card,
+.login-success,
+.summary-caption {
   display: grid;
   gap: 10px;
   padding: 14px 16px;
@@ -239,52 +242,58 @@ button {
   background: rgba(255, 255, 255, 0.76);
 }
 
-.count-slider-head,
-.count-slider-scale {
+.login-head,
+.login-success {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  align-items: center;
+  align-items: flex-start;
 }
 
-.count-slider-head strong {
-  font-size: 1.4rem;
-}
-
-.count-slider-head span,
-.count-slider-scale span {
+.count-input-card span,
+.summary-caption span,
+.login-head p,
+.login-success span {
   color: var(--muted);
 }
 
-.count-slider {
-  appearance: none;
-  height: 10px;
-  padding: 0;
-  border: 0;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #ffb25c 0%, #ffd59d 100%);
-  outline: none;
+.count-input-card input {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
 }
 
-.count-slider::-webkit-slider-thumb {
-  appearance: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid rgba(84, 42, 0, 0.16);
-  background: #fffaf2;
-  box-shadow: 0 6px 16px rgba(217, 110, 20, 0.24);
-  cursor: ew-resize;
+.login-card {
+  margin-bottom: 16px;
 }
 
-.count-slider::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
-  border: 2px solid rgba(84, 42, 0, 0.16);
-  border-radius: 50%;
-  background: #fffaf2;
-  box-shadow: 0 6px 16px rgba(217, 110, 20, 0.24);
-  cursor: ew-resize;
+.login-head h3,
+.login-head p,
+.summary-caption strong,
+.summary-caption span {
+  margin: 0;
+}
+
+.login-form {
+  display: grid;
+  gap: 12px;
+}
+
+.login-action {
+  width: auto;
+}
+
+.login-success {
+  align-items: center;
+}
+
+.login-success strong {
+  font-size: 1.1rem;
+}
+
+.summary-caption {
+  grid-template-columns: 1fr auto;
+  align-items: center;
 }
 
 .stats-board,
@@ -453,11 +462,6 @@ button {
   background: rgba(217, 242, 210, 0.72);
 }
 
-.mistake-card.summary-correct {
-  background: rgba(217, 242, 210, 0.62);
-  border-color: rgba(106, 166, 96, 0.28);
-}
-
 .mistake-card.summary-incorrect {
   background: rgba(255, 226, 216, 0.82);
   border-color: rgba(201, 103, 78, 0.24);
@@ -518,7 +522,10 @@ button {
   }
 
   .retry-head,
-  .feedback-head {
+  .feedback-head,
+  .login-head,
+  .login-success,
+  .summary-caption {
     flex-direction: column;
     align-items: stretch;
   }

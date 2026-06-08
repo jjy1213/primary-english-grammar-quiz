@@ -228,6 +228,7 @@ export function submitQuizAnswer(input: {
         const relatedAttempt = session.answers.find((answer) => answer.questionId === item.id);
         return { item, relatedAttempt };
       })
+      .filter((entry) => !(entry.relatedAttempt?.isCorrect ?? false))
       .map((entry) => ({
         questionId: entry.item.id,
         stem: entry.item.stem,
@@ -270,5 +271,5 @@ export function submitQuizAnswer(input: {
     nextQuestion,
     isFinished,
     summary
-  };
-}
+    };
+  }

@@ -3,8 +3,9 @@ import express from "express";
 import { ensureAppFiles } from "./fsUtils.js";
 import { appConfig } from "./config.js";
 import { getAttemptById } from "./attemptStore.js";
+import { login } from "./authService.js";
 import { getKnowledgePoints, getQuestions, startQuiz, submitQuizAnswer } from "./quizService.js";
-import { startQuizSchema, submitQuizSchema } from "./validation.js";
+import { loginSchema, startQuizSchema, submitQuizSchema } from "./validation.js";
 
 ensureAppFiles();
 
@@ -38,6 +39,22 @@ app.get("/api/attempts/:id", (req, res) => {
   }
 
   res.json(attempt);
+});
+
+app.post("/api/login", (req, res) => {
+  const parsed = loginSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.flatten() });
+    return;
+  }
+
+  try {
+    res.json(login(parsed.data));
+  } catch (error) {
+    res.status(401).json({
+      error: error instanceof Error ? error.message : "Unable to login."
+    });
+  }
 });
 
 app.post("/api/quiz/start", (req, res) => {

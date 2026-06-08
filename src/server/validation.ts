@@ -9,6 +9,13 @@ export const knowledgePointSchema = z.object({
   relatedPoints: z.array(z.string())
 });
 
+export const userAccountSchema = z.object({
+  id: z.string().min(1),
+  username: z.string().min(1),
+  password: z.string().min(1),
+  displayName: z.string().min(1)
+});
+
 export const questionSchema = z
   .object({
     id: z.string().min(1),
@@ -40,6 +47,7 @@ export const questionSchema = z
 
 export const questionListSchema = z.array(questionSchema);
 export const knowledgePointListSchema = z.array(knowledgePointSchema);
+export const userAccountListSchema = z.array(userAccountSchema);
 
 export const startQuizSchema = z.object({
   mode: z.enum(["random", "knowledgePoint"]),
@@ -52,4 +60,9 @@ export const submitQuizSchema = z.object({
   sessionId: z.string().min(1),
   questionId: z.string().min(1),
   userAnswer: z.string()
+});
+
+export const loginSchema = z.object({
+  username: z.string().min(1),
+  password: z.string().min(1)
 });

@@ -86,6 +86,14 @@ interface RetryFeedback {
   userAnswer: string;
 }
 
+interface LoginResponse {
+  user: {
+    id: string;
+    username: string;
+    displayName: string;
+  };
+}
+
 const quizModeOptions: Array<{ value: QuizMode; label: string }> = [
   { value: "random", label: "随机练习" },
   { value: "knowledgePoint", label: "按考点练习" }
@@ -176,6 +184,19 @@ const api = {
 
     return response.json();
   },
+  async login(payload: { username: string; password: string }): Promise<LoginResponse> {
+    const response = await fetch(buildApiUrl("/api/login"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(await readErrorMessage(response, "登录失败。"));
+    }
+
+    return response.json();
+  },
   async submitAnswer(payload: {
     sessionId: string;
     questionId: string;
@@ -261,7 +282,7 @@ function getSegmentPosition(optionCount: number, index: number) {
 
 function App() {
   const [knowledgePoints, setKnowledgePoints] = useState<KnowledgePoint[]>([]);
-  const [questionCount, setQuestionCount] = useState(5);
+  const [questionCountInput, setQuestionCountInput] = useState("5");
   const [mode, setMode] = useState<QuizMode>("random");
   const [questionType, setQuestionType] = useState<QuestionTypeFilter>("all");
   const [selectedKnowledgePointId, setSelectedKnowledgePointId] = useState("");
@@ -280,6 +301,10 @@ function App() {
   const [retryDraftAnswer, setRetryDraftAnswer] = useState("");
   const [retryFeedback, setRetryFeedback] = useState<RetryFeedback | null>(null);
   const [retryResults, setRetryResults] = useState<Record<string, RetryFeedback>>({});
+  const [loginForm, setLoginForm] = useState({ username: "", password: "" });
+  const [loggedInUser, setLoggedInUser] = useState<LoginResponse["user"] | null>(null);
+  const [loginError, setLoginError] = useState("");
+  const [loggingIn, setLoggingIn] = useState(false);
 
   useEffect(() => {
     void api.getKnowledgePoints().then((items) => {
@@ -296,7 +321,9 @@ function App() {
   }, [mode, questionType, selectedKnowledgePointId]);
 
   useEffect(() => {
-    setQuestionCount((current) => clampQuestionCount(current, questionPool.length || 1));
+    setQuestionCountInput((current) =>
+      String(clampQuestionCount(Number.parseInt(current, 10), questionPool.length || 1))
+    );
   }, [questionPool.length]);
 
   const selectedKnowledgePoint = useMemo(
@@ -305,16 +332,19 @@ function App() {
   );
 
   const maxSelectableCount = Math.max(1, questionPool.length || 1);
-  const wrongItems = useMemo(
-    () => summary?.items.filter((item) => !item.isCorrect) ?? [],
-    [summary]
-  );
+  const resolvedQuestionCount = clampQuestionCount(Number.parseInt(questionCountInput, 10), maxSelectableCount);
+  const wrongItems = summary?.items ?? [];
   const retryQuestion = wrongItems[retryIndex] ?? null;
   const retryCorrectCount = Object.values(retryResults).filter((item) => item.isCorrect).length;
   const modeIndex = quizModeOptions.findIndex((item) => item.value === mode);
   const questionTypeIndex = questionTypeOptions.findIndex((item) => item.value === questionType);
 
   async function handleStartQuiz() {
+    if (!loggedInUser) {
+      setErrorMessage("请先登录后再开始练习。");
+      return;
+    }
+
     setStarting(true);
     setErrorMessage("");
     setFeedback(null);
@@ -331,16 +361,33 @@ function App() {
         mode,
         knowledgePointId: mode === "knowledgePoint" ? selectedKnowledgePointId : undefined,
         questionType,
-        questionCount: clampQuestionCount(questionCount, maxSelectableCount)
+        questionCount: resolvedQuestionCount
       });
 
       setSessionId(response.sessionId);
       setCurrentQuestion(response.currentQuestion);
       setDraftAnswer("");
+      setQuestionCountInput(String(response.totalQuestions));
     } catch (error) {
       setErrorMessage(getErrorMessage(error, "无法开始练习。"));
     } finally {
       setStarting(false);
+    }
+  }
+
+  async function handleLogin(event: FormEvent) {
+    event.preventDefault();
+    setLoggingIn(true);
+    setLoginError("");
+
+    try {
+      const response = await api.login(loginForm);
+      setLoggedInUser(response.user);
+    } catch (error) {
+      setLoggedInUser(null);
+      setLoginError(getErrorMessage(error, "登录失败。"));
+    } finally {
+      setLoggingIn(false);
     }
   }
 
@@ -390,6 +437,13 @@ function App() {
     setRetryDraftAnswer("");
     setRetryFeedback(null);
     setRetryResults({});
+  }
+
+  function handleLogout() {
+    setLoggedInUser(null);
+    setLoginForm({ username: "", password: "" });
+    setLoginError("");
+    resetQuiz();
   }
 
   function handleContinueToNext() {
@@ -497,7 +551,56 @@ function App() {
         <section className="panel setup-panel">
           <div className="panel-title">
             <h2>开始练习</h2>
-            <p>先选模式、题型和题数，再进入单题练习。</p>
+            <p>先登录，再选模式、题型和题数。</p>
+          </div>
+
+          <div className="login-card">
+            <div className="login-head">
+              <div>
+                <h3>账号登录</h3>
+                <p>登录后才能开始本轮练习。</p>
+              </div>
+              {loggedInUser ? (
+                <button type="button" className="secondary-action login-action" onClick={handleLogout}>
+                  退出登录
+                </button>
+              ) : null}
+            </div>
+
+            {loggedInUser ? (
+              <div className="login-success">
+                <strong>{loggedInUser.displayName}</strong>
+                <span>{loggedInUser.username}</span>
+              </div>
+            ) : (
+              <form className="login-form" onSubmit={handleLogin}>
+                <label className="field">
+                  <span>账号</span>
+                  <input
+                    value={loginForm.username}
+                    onChange={(event) => setLoginForm((current) => ({ ...current, username: event.target.value }))}
+                    placeholder="请输入账号"
+                  />
+                </label>
+
+                <label className="field">
+                  <span>密码</span>
+                  <input
+                    type="password"
+                    value={loginForm.password}
+                    onChange={(event) => setLoginForm((current) => ({ ...current, password: event.target.value }))}
+                    placeholder="请输入密码"
+                  />
+                </label>
+
+                <button className="secondary-action login-action" type="submit" disabled={loggingIn}>
+                  {loggingIn ? "登录中..." : "登录"}
+                </button>
+              </form>
+            )}
+
+            <p className="hint-text">演示账号：demo，密码：demo123</p>
+            {loginError ? <div className="error-box">{loginError}</div> : null}
           </div>
 
           <div className="field">
@@ -555,25 +658,20 @@ function App() {
 
           <label className="field">
             <span>练习题数</span>
-            <div className="count-slider-card">
-              <div className="count-slider-head">
-                <strong>{questionCount} 题</strong>
-                <span>左减右增</span>
-              </div>
+            <div className="count-input-card">
               <input
-                className="count-slider"
-                type="range"
+                type="number"
                 min={1}
                 max={maxSelectableCount}
-                value={questionCount}
-                onChange={(event) => setQuestionCount(clampQuestionCount(Number(event.target.value), maxSelectableCount))}
+                inputMode="numeric"
+                value={questionCountInput}
+                onChange={(event) => setQuestionCountInput(event.target.value)}
               />
-              <div className="count-slider-scale">
-                <span>1 题</span>
-                <span>{maxSelectableCount} 题</span>
-              </div>
+              <span>最多 {maxSelectableCount} 题</span>
             </div>
-            <small className="hint-text">题数上限会跟随当前题型和筛选后的题库数量变化，当前最多 {maxSelectableCount} 题</small>
+            <small className="hint-text">
+              如果输入超过题库上限，开始练习时会自动按最多 {maxSelectableCount} 题处理，当前将出 {resolvedQuestionCount} 题。
+            </small>
           </label>
 
           <div className="stats-board">
@@ -636,7 +734,7 @@ function App() {
           ) : (
             <div className="empty-card">
               <h3>{summary ? "本轮练习已完成" : "还没有开始练习"}</h3>
-              <p>{summary ? "可以查看结果，或重新开始新一轮练习。" : "先在左侧选择模式、题型和题数后开始做题。"}</p>
+              <p>{summary ? "可以查看结果，或重新开始新一轮练习。" : "先在左侧登录并选择模式、题型和题数后开始做题。"}</p>
               {(summary || sessionId) && (
                 <button type="button" className="secondary-action" onClick={resetQuiz}>
                   重新开始
@@ -673,7 +771,7 @@ function App() {
       <section className="panel summary-panel">
         <div className="panel-title">
           <h2>结果汇总</h2>
-          <p>完成练习后，这里会显示整轮全部题目的结果。</p>
+          <p>完成练习后，这里会显示数据汇总和错题明细。</p>
         </div>
 
         {summary ? (
@@ -693,23 +791,32 @@ function App() {
               </article>
             </div>
 
+            <div className="summary-caption">
+              <strong>错题明细</strong>
+              <span>本轮只展示答错的题目。</span>
+            </div>
+
             <div className="mistake-list">
-              {summary.items.map((item) => (
-                <article
-                  key={item.questionId}
-                  className={`mistake-card ${item.isCorrect ? "summary-correct" : "summary-incorrect"}`}
-                >
-                  <h3>{item.stem}</h3>
-                  <p>结果：{item.isCorrect ? "答对" : "答错"}</p>
-                  <p>题型：{getSourceTypeLabel(item.sourceType)}</p>
-                  <p>来源：{item.examSource}</p>
-                  {item.sourceType === "choice" && item.options?.length ? <p>原选项：{item.options.join(" / ")}</p> : null}
-                  <p>你的答案：{item.userAnswer || "未填写"}</p>
-                  <p>正确答案：{formatCorrectAnswer(item.correctAnswer, item.correctAnswerLabel)}</p>
-                  <p>对应考点：{item.knowledgePointName}</p>
-                  <p>讲解：{item.explanation}</p>
-                </article>
-              ))}
+              {summary.items.length > 0 ? (
+                summary.items.map((item) => (
+                  <article key={item.questionId} className="mistake-card summary-incorrect">
+                    <h3>{item.stem}</h3>
+                    <p>结果：答错</p>
+                    <p>题型：{getSourceTypeLabel(item.sourceType)}</p>
+                    <p>来源：{item.examSource}</p>
+                    {item.sourceType === "choice" && item.options?.length ? <p>原选项：{item.options.join(" / ")}</p> : null}
+                    <p>你的答案：{item.userAnswer || "未填写"}</p>
+                    <p>正确答案：{formatCorrectAnswer(item.correctAnswer, item.correctAnswerLabel)}</p>
+                    <p>对应考点：{item.knowledgePointName}</p>
+                    <p>讲解：{item.explanation}</p>
+                  </article>
+                ))
+              ) : (
+                <div className="success-card">
+                  <h3>这一轮没有错题</h3>
+                  <p>上方已经保留总题数、答对数和正确率。</p>
+                </div>
+              )}
             </div>
 
             <div className="retry-panel">
@@ -800,7 +907,7 @@ function App() {
         ) : (
           <div className="empty-card">
             <h3>还没有结果</h3>
-            <p>完成一轮练习后，这里会显示总题数、正确率和每道题的明细。</p>
+            <p>完成一轮练习后，这里会显示总题数、答对数、正确率和错题明细。</p>
           </div>
         )}
       </section>
