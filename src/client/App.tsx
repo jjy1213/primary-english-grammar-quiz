@@ -86,6 +86,17 @@ interface RetryFeedback {
   userAnswer: string;
 }
 
+const quizModeOptions: Array<{ value: QuizMode; label: string }> = [
+  { value: "random", label: "随机练习" },
+  { value: "knowledgePoint", label: "按考点练习" }
+];
+
+const questionTypeOptions: Array<{ value: QuestionTypeFilter; label: string }> = [
+  { value: "all", label: "混合题型" },
+  { value: "choice", label: "只做选择题" },
+  { value: "cloze", label: "只做填空题" }
+];
+
 const api = {
   async getKnowledgePoints(): Promise<KnowledgePoint[]> {
     const response = await fetch(buildApiUrl("/api/knowledge-points"));
@@ -201,6 +212,13 @@ function isRetryAnswerCorrect(item: SummaryItem, userAnswer: string) {
   return false;
 }
 
+function getSegmentPosition(optionCount: number, index: number) {
+  return {
+    width: `${100 / optionCount}%`,
+    transform: `translateX(${index * 100}%)`
+  };
+}
+
 function App() {
   const [knowledgePoints, setKnowledgePoints] = useState<KnowledgePoint[]>([]);
   const [questionCount, setQuestionCount] = useState(5);
@@ -244,13 +262,15 @@ function App() {
     [knowledgePoints, selectedKnowledgePointId]
   );
 
-  const maxSelectableCount = Math.max(1, Math.min(20, questionPool.length || 1));
+  const maxSelectableCount = Math.max(1, questionPool.length || 1);
   const wrongItems = useMemo(
     () => summary?.items.filter((item) => !item.isCorrect) ?? [],
     [summary]
   );
   const retryQuestion = wrongItems[retryIndex] ?? null;
   const retryCorrectCount = Object.values(retryResults).filter((item) => item.isCorrect).length;
+  const modeIndex = quizModeOptions.findIndex((item) => item.value === mode);
+  const questionTypeIndex = questionTypeOptions.findIndex((item) => item.value === questionType);
 
   async function handleStartQuiz() {
     setStarting(true);
@@ -423,31 +443,42 @@ function App() {
             <p>先选模式、题型和题数，再进入单题练习。</p>
           </div>
 
-          <div className="mode-switch">
-            <button
-              className={mode === "random" ? "selected" : ""}
-              onClick={() => setMode("random")}
-              type="button"
-            >
-              随机练习
-            </button>
-            <button
-              className={mode === "knowledgePoint" ? "selected" : ""}
-              onClick={() => setMode("knowledgePoint")}
-              type="button"
-            >
-              按考点练习
-            </button>
+          <div className="field">
+            <span>练习模式</span>
+            <div className="segment-control two-up" role="tablist" aria-label="练习模式">
+              <div className="segment-indicator" style={getSegmentPosition(quizModeOptions.length, modeIndex)} />
+              {quizModeOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`segment-option ${mode === option.value ? "active" : ""}`}
+                  onClick={() => setMode(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <label className="field">
+          <div className="field">
             <span>题型</span>
-            <select value={questionType} onChange={(event) => setQuestionType(event.target.value as QuestionTypeFilter)}>
-              <option value="all">混合题型</option>
-              <option value="choice">只做选择题</option>
-              <option value="cloze">只做填空题</option>
-            </select>
-          </label>
+            <div className="segment-control three-up" role="tablist" aria-label="题型">
+              <div
+                className="segment-indicator"
+                style={getSegmentPosition(questionTypeOptions.length, questionTypeIndex)}
+              />
+              {questionTypeOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`segment-option ${questionType === option.value ? "active" : ""}`}
+                  onClick={() => setQuestionType(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {mode === "knowledgePoint" ? (
             <label className="field">
@@ -474,7 +505,7 @@ function App() {
               value={questionCount}
               onChange={(event) => setQuestionCount(clampQuestionCount(Number(event.target.value), maxSelectableCount))}
             />
-            <small className="hint-text">当前最多可选 {maxSelectableCount} 题</small>
+            <small className="hint-text">可自定义题数，当前最多 {maxSelectableCount} 题</small>
           </label>
 
           <div className="stats-board">
@@ -597,9 +628,7 @@ function App() {
                   <p>结果：{item.isCorrect ? "答对" : "答错"}</p>
                   <p>题型：{getSourceTypeLabel(item.sourceType)}</p>
                   <p>来源：{item.examSource}</p>
-                  {item.sourceType === "choice" && item.options?.length ? (
-                    <p>原选项：{item.options.join(" / ")}</p>
-                  ) : null}
+                  {item.sourceType === "choice" && item.options?.length ? <p>原选项：{item.options.join(" / ")}</p> : null}
                   <p>你的答案：{item.userAnswer || "未填写"}</p>
                   <p>正确答案：{formatCorrectAnswer(item.correctAnswer, item.correctAnswerLabel)}</p>
                   <p>对应考点：{item.knowledgePointName}</p>
@@ -653,11 +682,7 @@ function App() {
 
                     {renderAnswerInput(retryQuestion, retryDraftAnswer, setRetryDraftAnswer)}
 
-                    <button
-                      className="primary-action"
-                      type="submit"
-                      disabled={retryDraftAnswer.trim() === ""}
-                    >
+                    <button className="primary-action" type="submit" disabled={retryDraftAnswer.trim() === ""}>
                       提交错题答案
                     </button>
                   </form>

@@ -150,24 +150,61 @@ button {
   margin-bottom: 18px;
 }
 
-.mode-switch {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.mode-switch button,
+.segment-control,
 .option-btn,
 .secondary-action {
+  position: relative;
   border-radius: 18px;
-  padding: 0.95rem 1rem;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--line);
   color: var(--ink);
 }
 
-.mode-switch button.selected,
+.segment-control {
+  display: grid;
+  align-items: center;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.segment-option {
+  position: relative;
+  z-index: 1;
+  border-radius: 14px;
+  padding: 0.95rem 1rem;
+  background: transparent;
+  color: var(--muted);
+  transition: color 180ms ease;
+}
+
+.segment-option.active {
+  color: #542a00;
+}
+
+.segment-indicator {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  bottom: 4px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffc96b, #ff9a3d);
+  box-shadow: 0 10px 22px rgba(255, 154, 61, 0.2);
+  transition: transform 220ms ease, width 220ms ease;
+}
+
+.segment-control.two-up {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.segment-control.three-up {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.option-btn,
+.secondary-action {
+  padding: 0.95rem 1rem;
+}
+
 .option-btn.active {
   background: linear-gradient(135deg, #ffc96b, #ff9a3d);
   color: #542a00;
@@ -402,9 +439,25 @@ button {
   .option-grid,
   .stats-board,
   .summary-hero,
-  .mode-switch,
   .retry-stats {
     grid-template-columns: 1fr;
+  }
+
+  .segment-control.two-up,
+  .segment-control.three-up {
+    grid-template-columns: 1fr;
+  }
+
+  .segment-indicator {
+    display: none;
+  }
+
+  .segment-option {
+    border: 1px solid transparent;
+  }
+
+  .segment-option.active {
+    background: linear-gradient(135deg, #ffc96b, #ff9a3d);
   }
 
   .retry-head,
