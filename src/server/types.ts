@@ -78,6 +78,7 @@ export interface QuizSubmitResponse {
   sessionId: string;
   isCorrect: boolean;
   correctAnswer: string;
+  correctAnswerLabel?: string;
   explanation: string;
   knowledgePoint: KnowledgePoint;
   userAnswer: string;
@@ -96,8 +97,12 @@ export interface QuizSubmitResponse {
     incorrectItems: Array<{
       questionId: string;
       stem: string;
+      sourceType: QuestionSourceType;
+      options?: string[];
+      examSource: string;
       userAnswer: string;
       correctAnswer: string;
+      correctAnswerLabel?: string;
       knowledgePointName: string;
       explanation: string;
     }>;

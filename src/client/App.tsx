@@ -33,10 +33,24 @@ interface QuizStartResponse {
   currentQuestion: QuizQuestion | null;
 }
 
+interface SummaryIncorrectItem {
+  questionId: string;
+  stem: string;
+  sourceType: QuestionSourceType;
+  options?: string[];
+  examSource: string;
+  userAnswer: string;
+  correctAnswer: string;
+  correctAnswerLabel?: string;
+  knowledgePointName: string;
+  explanation: string;
+}
+
 interface SubmitResponse {
   sessionId: string;
   isCorrect: boolean;
   correctAnswer: string;
+  correctAnswerLabel?: string;
   explanation: string;
   knowledgePoint: KnowledgePoint;
   userAnswer: string;
@@ -52,14 +66,7 @@ interface SubmitResponse {
     totalQuestions: number;
     correctCount: number;
     accuracy: number;
-    incorrectItems: Array<{
-      questionId: string;
-      stem: string;
-      userAnswer: string;
-      correctAnswer: string;
-      knowledgePointName: string;
-      explanation: string;
-    }>;
+    incorrectItems: SummaryIncorrectItem[];
   };
 }
 
@@ -151,6 +158,14 @@ function getQuestionTypeLabel(questionType: QuestionTypeFilter) {
 
 function getSourceTypeLabel(sourceType: QuestionSourceType) {
   return sourceType === "choice" ? "选择题" : "填空题";
+}
+
+function formatCorrectAnswer(answer: string, label?: string) {
+  if (!label || label === answer) {
+    return answer;
+  }
+
+  return `${answer}（${label}）`;
 }
 
 function clampQuestionCount(value: number, max: number) {
@@ -447,8 +462,12 @@ function App() {
                 </span>
               </div>
               <p>题型：{getSourceTypeLabel(feedback.question.sourceType)}</p>
+              <p>来源：{feedback.question.examSource}</p>
+              {feedback.question.sourceType === "choice" && feedback.question.options?.length ? (
+                <p>原选项：{feedback.question.options.join(" / ")}</p>
+              ) : null}
               <p>你的答案：{feedback.userAnswer || "未填写"}</p>
-              <p>正确答案：{feedback.correctAnswer}</p>
+              <p>正确答案：{formatCorrectAnswer(feedback.correctAnswer, feedback.correctAnswerLabel)}</p>
               <p>考点：{feedback.knowledgePoint.name}</p>
               <p>讲解：{feedback.explanation}</p>
             </div>
@@ -459,7 +478,7 @@ function App() {
       <section className="panel summary-panel">
         <div className="panel-title">
           <h2>结果汇总</h2>
-          <p>完成练习后，这里会显示正确率和错题考点。</p>
+          <p>完成练习后，这里会显示正确率、题目来源和错题考点。</p>
         </div>
 
         {summary ? (
@@ -486,8 +505,13 @@ function App() {
                 summary.incorrectItems.map((item) => (
                   <article key={item.questionId} className="mistake-card">
                     <h3>{item.stem}</h3>
+                    <p>题型：{getSourceTypeLabel(item.sourceType)}</p>
+                    <p>来源：{item.examSource}</p>
+                    {item.sourceType === "choice" && item.options?.length ? (
+                      <p>原选项：{item.options.join(" / ")}</p>
+                    ) : null}
                     <p>你的答案：{item.userAnswer || "未填写"}</p>
-                    <p>正确答案：{item.correctAnswer}</p>
+                    <p>正确答案：{formatCorrectAnswer(item.correctAnswer, item.correctAnswerLabel)}</p>
                     <p>对应考点：{item.knowledgePointName}</p>
                     <p>讲解：{item.explanation}</p>
                   </article>

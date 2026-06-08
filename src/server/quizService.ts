@@ -48,6 +48,22 @@ function normalizeAnswer(value: string): string {
   return value.trim().toLowerCase();
 }
 
+function getChoiceAnswerLabel(question: Question, answer: string) {
+  if (question.sourceType !== "choice" || !question.options?.length) {
+    return undefined;
+  }
+
+  const normalized = normalizeAnswer(answer);
+  const letterIndex = normalized.charCodeAt(0) - 97;
+  const looksLikeChoiceLetter = normalized.length === 1 && letterIndex >= 0 && letterIndex < question.options.length;
+
+  if (looksLikeChoiceLetter) {
+    return question.options[letterIndex];
+  }
+
+  return answer;
+}
+
 function getQuestionMap() {
   return new Map(loadQuestions().map((item) => [item.id, item]));
 }
@@ -160,6 +176,8 @@ export function submitQuizAnswer(input: {
     throw new Error("Knowledge point not found.");
   }
 
+  const correctAnswerLabel = getChoiceAnswerLabel(question, question.answer);
+
   const isCorrect = normalizeAnswer(input.userAnswer) === normalizeAnswer(question.answer);
   if (isCorrect) {
     session.correctCount += 1;
@@ -198,8 +216,12 @@ export function submitQuizAnswer(input: {
       .map((entry) => ({
         questionId: entry.item.id,
         stem: entry.item.stem,
+        sourceType: entry.item.sourceType,
+        options: entry.item.options,
+        examSource: entry.item.examSource,
         userAnswer: entry.relatedAttempt!.userAnswer,
         correctAnswer: entry.item.answer,
+        correctAnswerLabel: getChoiceAnswerLabel(entry.item, entry.item.answer),
         knowledgePointName: knowledgeMap.get(entry.item.knowledgePointId)!.name,
         explanation: entry.item.explanation
       }));
@@ -219,6 +241,7 @@ export function submitQuizAnswer(input: {
     sessionId: session.id,
     isCorrect,
     correctAnswer: question.answer,
+    correctAnswerLabel,
     explanation: question.explanation,
     knowledgePoint,
     userAnswer: input.userAnswer,
