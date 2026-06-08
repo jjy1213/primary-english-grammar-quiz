@@ -1,0 +1,102 @@
+export type QuestionSourceType = "choice" | "cloze";
+export type QuizMode = "random" | "knowledgePoint";
+
+export interface KnowledgePoint {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  keywords: string[];
+  relatedPoints: string[];
+}
+
+export interface Question {
+  id: string;
+  sourceType: QuestionSourceType;
+  stem: string;
+  options?: string[];
+  answer: string;
+  gradeBand: string;
+  examSource: string;
+  knowledgePointId: string;
+  explanation: string;
+  difficulty: string;
+}
+
+export interface AttemptRecord {
+  id: string;
+  submittedAt: string;
+  questionId: string;
+  userAnswer: string;
+  isCorrect: boolean;
+  correctAnswer: string;
+  knowledgePointId: string;
+}
+
+export interface QuizSession {
+  id: string;
+  mode: QuizMode;
+  knowledgePointId?: string;
+  questionIds: string[];
+  currentIndex: number;
+  correctCount: number;
+  createdAt: string;
+  completedAt?: string;
+  answers: Array<{
+    questionId: string;
+    userAnswer: string;
+    isCorrect: boolean;
+  }>;
+}
+
+export interface PublicQuestion {
+  id: string;
+  sourceType: QuestionSourceType;
+  stem: string;
+  options?: string[];
+  gradeBand: string;
+  examSource: string;
+  knowledgePointId: string;
+  difficulty: string;
+}
+
+export interface QuizQuestionPayload extends PublicQuestion {
+  knowledgePointName: string;
+}
+
+export interface QuizStartResponse {
+  sessionId: string;
+  mode: QuizMode;
+  totalQuestions: number;
+  currentQuestion: QuizQuestionPayload | null;
+}
+
+export interface QuizSubmitResponse {
+  sessionId: string;
+  isCorrect: boolean;
+  correctAnswer: string;
+  explanation: string;
+  knowledgePoint: KnowledgePoint;
+  userAnswer: string;
+  question: QuizQuestionPayload;
+  progress: {
+    answered: number;
+    total: number;
+    correct: number;
+  };
+  nextQuestion: QuizQuestionPayload | null;
+  isFinished: boolean;
+  summary?: {
+    totalQuestions: number;
+    correctCount: number;
+    accuracy: number;
+    incorrectItems: Array<{
+      questionId: string;
+      stem: string;
+      userAnswer: string;
+      correctAnswer: string;
+      knowledgePointName: string;
+      explanation: string;
+    }>;
+  };
+}

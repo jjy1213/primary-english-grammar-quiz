@@ -1,0 +1,72 @@
+[
+  {
+    "id": "q-001",
+    "sourceType": "choice",
+    "stem": "My sister ____ a teacher in the school.",
+    "options": ["am", "is", "are", "be"],
+    "answer": "is",
+    "gradeBand": "primary-upper",
+    "examSource": "2024 某地中考真题改编",
+    "knowledgePointId": "kp-be-verb",
+    "explanation": "主语 My sister 是第三人称单数，所以要用 is。这个题的考点是 be 动词和主语一致。",
+    "difficulty": "easy"
+  },
+  {
+    "id": "q-002",
+    "sourceType": "choice",
+    "stem": "We have an English class ____ Monday morning.",
+    "options": ["in", "on", "at", "for"],
+    "answer": "on",
+    "gradeBand": "primary-upper",
+    "examSource": "2023 某地中考真题改编",
+    "knowledgePointId": "kp-preposition-time",
+    "explanation": "Monday morning 是具体某一天的上午，要用 on。这个题考查时间介词的区别。",
+    "difficulty": "easy"
+  },
+  {
+    "id": "q-003",
+    "sourceType": "choice",
+    "stem": "Tom and I are good friends. ____ often play football after school.",
+    "options": ["He", "She", "We", "They"],
+    "answer": "We",
+    "gradeBand": "primary-upper",
+    "examSource": "2022 某地中考真题改编",
+    "knowledgePointId": "kp-pronoun",
+    "explanation": "Tom and I 指两个人，且包含说话人自己，所以要用 We。这个题考查人称代词主格。",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q-004",
+    "sourceType": "cloze",
+    "stem": "Lucy likes ____ (read) storybooks after dinner.",
+    "answer": "reading",
+    "gradeBand": "primary-upper",
+    "examSource": "2024 某地中考填空题改编",
+    "knowledgePointId": "kp-like-v-ing",
+    "explanation": "like 后面常接动名词表示习惯或爱好，所以填 reading。这个题考查动词形式变化。",
+    "difficulty": "medium"
+  },
+  {
+    "id": "q-005",
+    "sourceType": "cloze",
+    "stem": "I ____ twelve years old.",
+    "answer": "am",
+    "gradeBand": "primary-upper",
+    "examSource": "2021 某地中考填空题改编",
+    "knowledgePointId": "kp-be-verb",
+    "explanation": "主语是 I，所以 be 动词要用 am。这个题考查 be 动词和主语的搭配。",
+    "difficulty": "easy"
+  },
+  {
+    "id": "q-006",
+    "sourceType": "choice",
+    "stem": "This is my new classmate. ____ name is Anna.",
+    "options": ["He", "She", "Her", "His"],
+    "answer": "Her",
+    "gradeBand": "primary-upper",
+    "examSource": "2023 某地中考真题改编",
+    "knowledgePointId": "kp-pronoun",
+    "explanation": "空后有名词 name，所以要用形容词性物主代词 Her。这个题考查代词形式辨析。",
+    "difficulty": "medium"
+  }
+]

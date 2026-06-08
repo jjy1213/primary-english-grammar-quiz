@@ -1,0 +1,25 @@
+[
+  {
+    "stem": "题干原文",
+    "sourceType": "choice",
+    "options": ["A", "B", "C", "D"],
+    "answer": "A",
+    "examSource": "2025 某地中考真题",
+    "knowledgePointId": "kp-example",
+    "knowledgePointName": "考点名称",
+    "explanation": "1到3句简短讲解",
+    "gradeBand": "primary-upper",
+    "difficulty": "easy"
+  },
+  {
+    "stem": "填空题原文，如 I ____ happy.",
+    "sourceType": "cloze",
+    "answer": "am",
+    "examSource": "2025 某地中考真题",
+    "knowledgePointId": "kp-example",
+    "knowledgePointName": "考点名称",
+    "explanation": "1到3句简短讲解",
+    "gradeBand": "primary-upper",
+    "difficulty": "easy"
+  }
+]
