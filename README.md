@@ -72,10 +72,37 @@ npm run dev
 3. 在另一个终端中启动 Quick Tunnel：
 
 ```bash
-cloudflared tunnel --url http://127.0.0.1:4175
+cloudflared tunnel --url http://127.0.0.1:4175 --no-autoupdate
+```
+
+如果 Windows 终端提示 `cloudflared` 不是内部或外部命令，说明它还没有加入 `PATH`。可以用下面两种方式之一：
+
+```powershell
+& "C:\Users\你的用户名\AppData\Local\Temp\cloudflared-portable\cloudflared.exe" tunnel --url http://127.0.0.1:4175 --no-autoupdate
+```
+
+或者先给当前 PowerShell 会话临时追加 `PATH`：
+
+```powershell
+$env:PATH += ";C:\Users\你的用户名\AppData\Local\Temp\cloudflared-portable"
+cloudflared tunnel --url http://127.0.0.1:4175 --no-autoupdate
+```
+
+如果本机还没有安装 `cloudflared`，可以先执行：
+
+```powershell
+winget install --id Cloudflare.cloudflared
 ```
 
 4. 终端会输出一个 `https://*.trycloudflare.com` 链接，把这个链接发给其他用户即可访问当前本地页面。
+
+5. 关闭开发服务器或结束临时外链时，在对应终端中按：
+
+```powershell
+Ctrl+C
+```
+
+如果开发服务器和 `cloudflared` 分别运行在两个终端窗口里，需要在两个窗口里各按一次 `Ctrl+C`。重新执行 `npm run dev` 和上面的 tunnel 命令后，会生成一个新的临时外链。
 
 ### 常见问题
 
