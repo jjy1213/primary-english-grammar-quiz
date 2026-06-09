@@ -224,6 +224,12 @@ function buildApiUrl(path: string) {
     return `http://127.0.0.1:4310${path}`;
   }
 
+  const configuredBaseUrl = (globalThis as typeof globalThis & { __QUIZ_API_BASE_URL__?: string })
+    .__QUIZ_API_BASE_URL__;
+  if (configuredBaseUrl) {
+    return `${configuredBaseUrl}${path}`;
+  }
+
   return path;
 }
 

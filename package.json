@@ -11,7 +11,7 @@
     "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "tsx watch src/server/index.ts",
     "dev:server:build": "tsc -p tsconfig.server.json --watch",
-    "dev:client": "vite",
+    "dev:client": "vite --host 0.0.0.0",
     "dev:desktop": "concurrently \"npm:dev:server\" \"npm:dev:server:build\" \"npm:dev:client\" \"npm:dev:electron\"",
     "dev:electron": "wait-on dist/server/index.js tcp:4310 http://127.0.0.1:4175 && cross-env APP_ROOT=. tsx src/electron/main.ts",
     "build": "vite build && tsc -p tsconfig.server.json",
@@ -19,6 +19,7 @@
     "build:desktop": "npm run build && npm run build:electron && electron-builder",
     "start": "node dist/server/index.js",
     "start:desktop": "cross-env APP_ROOT=. electron .",
+    "preview": "vite preview --host 0.0.0.0",
     "test": "vitest run"
   },
   "dependencies": {

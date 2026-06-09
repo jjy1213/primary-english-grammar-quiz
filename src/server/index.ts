@@ -94,8 +94,8 @@ export function createServer() {
 }
 
 export function startServer(port = appConfig.serverPort) {
-  return app.listen(port, () => {
-    console.log(`Quiz API listening on http://localhost:${port}`);
+  return app.listen(port, appConfig.serverHost, () => {
+    console.log(`Quiz API listening on http://${appConfig.serverHost}:${port}`);
   });
 }
 

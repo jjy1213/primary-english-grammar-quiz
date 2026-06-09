@@ -7,6 +7,7 @@ const dataRoot = process.env.APP_DATA_ROOT
 
 export const appConfig = {
   serverPort: Number(process.env.SERVER_PORT ?? "4310"),
+  serverHost: process.env.SERVER_HOST ?? "127.0.0.1",
   defaultQuizSize: 5,
   clientOrigin: process.env.CLIENT_ORIGIN ?? "http://localhost:4175",
   appRoot,
