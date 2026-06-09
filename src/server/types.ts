@@ -89,6 +89,7 @@ export interface QuizSubmitResponse {
   correctAnswer: string;
   correctAnswerLabel?: string;
   explanation: string;
+  explanationSource: "ai" | "fallback";
   knowledgePoint: KnowledgePoint;
   userAnswer: string;
   question: QuizQuestionPayload;
@@ -116,6 +117,7 @@ export interface QuizSubmitResponse {
       correctAnswerLabel?: string;
       knowledgePointName: string;
       explanation: string;
+      explanationSource: "ai" | "fallback";
     }>;
   };
 }

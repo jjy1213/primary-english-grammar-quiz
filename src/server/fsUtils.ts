@@ -14,6 +14,10 @@ export function ensureAppFiles() {
   if (!fs.existsSync(paths.attempts)) {
     fs.writeFileSync(paths.attempts, "[]", "utf8");
   }
+
+  if (!fs.existsSync(paths.aiExplanationCache)) {
+    fs.writeFileSync(paths.aiExplanationCache, "{}", "utf8");
+  }
 }
 
 export function readJsonFile<T>(filePath: string): T {

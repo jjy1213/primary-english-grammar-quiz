@@ -1,0 +1,7 @@
+{
+  "{\"questionId\":\"q-002\",\"stem\":\"We have an English class ____ Monday morning.\",\"options\":[\"in\",\"on\",\"at\",\"for\"],\"correctAnswer\":\"on\",\"correctAnswerLabel\":\"on\",\"knowledgePointId\":\"kp-preposition-time\",\"knowledgePointName\":\"时间介词\",\"userAnswer\":\"on\",\"isCorrect\":true}": {
+    "explanation": "1. 这题在考什么：考介词。\n2. 为什么这个答案对：Monday morning 要用 on。\n3. 下次怎么更快看出来：看到具体某一天就先想 on。",
+    "explanationSource": "ai",
+    "updatedAt": "2026-06-09T09:19:23.256Z"
+  }
+}

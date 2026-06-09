@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 import { appConfig } from "./config.js";
 import { saveAttempt } from "./attemptStore.js";
 import { loadKnowledgePoints, loadQuestions } from "./contentStore.js";
+import { buildExplanation } from "./aiExplanationService.js";
 import type {
   KnowledgePoint,
   PublicQuestion,
@@ -169,11 +170,11 @@ export function startQuiz(input: {
   };
 }
 
-export function submitQuizAnswer(input: {
+export async function submitQuizAnswer(input: {
   sessionId: string;
   questionId: string;
   userAnswer: string;
-}): QuizSubmitResponse {
+}): Promise<QuizSubmitResponse> {
   const session = sessions.get(input.sessionId);
   if (!session) {
     throw new Error("Quiz session not found.");
@@ -201,8 +202,15 @@ export function submitQuizAnswer(input: {
   }
 
   const correctAnswerLabel = getChoiceAnswerLabel(question, question.answer);
-
   const isCorrect = isAnswerCorrect(question, input.userAnswer);
+  const explanationResult = await buildExplanation({
+    question,
+    knowledgePoint,
+    userAnswer: input.userAnswer,
+    isCorrect,
+    correctAnswerLabel
+  });
+
   if (isCorrect) {
     session.correctCount += 1;
   }
@@ -230,26 +238,41 @@ export function submitQuizAnswer(input: {
 
   if (isFinished) {
     session.completedAt = new Date().toISOString();
-    const items = session.questionIds
+    const incorrectEntries = session.questionIds
       .map((questionId) => questionMap.get(questionId)!)
       .map((item) => {
         const relatedAttempt = session.answers.find((answer) => answer.questionId === item.id);
         return { item, relatedAttempt };
       })
-      .filter((entry) => !(entry.relatedAttempt?.isCorrect ?? false))
-      .map((entry) => ({
-        questionId: entry.item.id,
-        stem: entry.item.stem,
-        sourceType: entry.item.sourceType,
-        options: entry.item.options,
-        examSource: entry.item.examSource,
-        userAnswer: entry.relatedAttempt?.userAnswer ?? "",
-        isCorrect: entry.relatedAttempt?.isCorrect ?? false,
-        correctAnswer: entry.item.answer,
-        correctAnswerLabel: getChoiceAnswerLabel(entry.item, entry.item.answer),
-        knowledgePointName: knowledgeMap.get(entry.item.knowledgePointId)!.name,
-        explanation: entry.item.explanation
-      }));
+      .filter((entry) => !(entry.relatedAttempt?.isCorrect ?? false));
+
+    const items = await Promise.all(
+      incorrectEntries.map(async (entry) => {
+        const summaryKnowledgePoint = knowledgeMap.get(entry.item.knowledgePointId)!;
+        const summaryExplanation = await buildExplanation({
+          question: entry.item,
+          knowledgePoint: summaryKnowledgePoint,
+          userAnswer: entry.relatedAttempt?.userAnswer ?? "",
+          isCorrect: entry.relatedAttempt?.isCorrect ?? false,
+          correctAnswerLabel: getChoiceAnswerLabel(entry.item, entry.item.answer)
+        });
+
+        return {
+          questionId: entry.item.id,
+          stem: entry.item.stem,
+          sourceType: entry.item.sourceType,
+          options: entry.item.options,
+          examSource: entry.item.examSource,
+          userAnswer: entry.relatedAttempt?.userAnswer ?? "",
+          isCorrect: entry.relatedAttempt?.isCorrect ?? false,
+          correctAnswer: entry.item.answer,
+          correctAnswerLabel: getChoiceAnswerLabel(entry.item, entry.item.answer),
+          knowledgePointName: summaryKnowledgePoint.name,
+          explanation: summaryExplanation.explanation,
+          explanationSource: summaryExplanation.explanationSource
+        };
+      })
+    );
 
     summary = {
       totalQuestions: session.questionIds.length,
@@ -267,7 +290,8 @@ export function submitQuizAnswer(input: {
     isCorrect,
     correctAnswer: question.answer,
     correctAnswerLabel,
-    explanation: question.explanation,
+    explanation: explanationResult.explanation,
+    explanationSource: explanationResult.explanationSource,
     knowledgePoint,
     userAnswer: input.userAnswer,
     question: toQuizQuestionPayload(question, knowledgePoint),
@@ -279,5 +303,5 @@ export function submitQuizAnswer(input: {
     nextQuestion,
     isFinished,
     summary
-    };
-  }
+  };
+}

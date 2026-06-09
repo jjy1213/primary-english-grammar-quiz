@@ -39,6 +39,59 @@ npm run dev
 - 前端：`http://localhost:4175`
 - 后端：`http://localhost:4310`
 
+### AI 解析接入
+
+当前版本已经支持在提交答案后调用 AI 生成更深入的中文讲解；如果未配置或调用失败，会自动回退到题库里的基础讲解。
+
+推荐先复制一份模板：
+
+```powershell
+Copy-Item .env.example .env
+```
+
+先在启动前配置环境变量：
+
+```powershell
+$env:AI_EXPLANATION_ENABLED="true"
+$env:OPENAI_API_KEY="你的 API Key"
+$env:OPENAI_MODEL="gpt-4.1-mini"
+```
+
+可选项：
+
+```powershell
+$env:OPENAI_BASE_URL="https://api.openai.com/v1"
+```
+
+说明：
+
+- `AI_EXPLANATION_ENABLED=true` 才会真正发起 AI 解析请求
+- `OPENAI_API_KEY` 未设置时，系统会继续使用原有固定讲解
+- `OPENAI_BASE_URL` 可用于兼容 OpenAI 接口的代理或网关
+- 相同题目、相同学生答案、相同对错状态会命中本地缓存，减少重复请求
+- AI 解析缓存文件默认保存在 `data/ai-explanations-cache.json`
+
+### 国产大模型支持
+
+当前版本已经内置常见 OpenAI 兼容接口的自动识别。多数情况下，用户只需要在 `.env` 里填写某一家厂商的 `API_KEY`，系统就会自动选好默认 `baseUrl` 和 `model`。
+
+已内置：
+
+- `DEEPSEEK_API_KEY`：默认 `https://api.deepseek.com/v1` + `deepseek-chat`
+- `DASHSCOPE_API_KEY`：默认 `https://dashscope.aliyuncs.com/compatible-mode/v1` + `qwen-plus`
+- `ZHIPU_API_KEY`：默认 `https://open.bigmodel.cn/api/paas/v4` + `glm-4-flash`
+- `MOONSHOT_API_KEY`：默认 `https://api.moonshot.cn/v1` + `moonshot-v1-8k`
+
+如果同时填写了多家，当前优先级为：
+
+1. `DEEPSEEK_API_KEY`
+2. `DASHSCOPE_API_KEY`
+3. `ZHIPU_API_KEY`
+4. `MOONSHOT_API_KEY`
+5. `OPENAI_API_KEY`
+
+如果你想改默认模型，也可以只改对应厂商的 `*_MODEL`，不需要手动改代码。
+
 ### 3. 运行测试
 
 ```bash

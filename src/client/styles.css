@@ -260,7 +260,8 @@ button {
 .count-input-card,
 .login-card,
 .login-success,
-.summary-caption {
+.summary-caption,
+.ai-status-card {
   display: grid;
   gap: 10px;
   padding: 14px 16px;
@@ -292,6 +293,47 @@ button {
 
 .login-card {
   margin-bottom: 16px;
+}
+
+.ai-status-card {
+  margin-bottom: 16px;
+}
+
+.ai-status-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.ai-status-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.ai-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.ai-status-badge.status-ai {
+  background: rgba(217, 242, 210, 0.82);
+}
+
+.ai-status-badge.status-fallback {
+  background: rgba(255, 226, 216, 0.88);
+}
+
+.ai-status-badge.status-disabled,
+.ai-status-badge.status-idle {
+  background: rgba(255, 244, 214, 0.9);
 }
 
 .login-head h3,

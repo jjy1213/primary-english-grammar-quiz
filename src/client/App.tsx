@@ -47,6 +47,7 @@ interface SummaryItem {
   correctAnswerLabel?: string;
   knowledgePointName: string;
   explanation: string;
+  explanationSource: "ai" | "fallback";
 }
 
 interface SubmitResponse {
@@ -55,6 +56,7 @@ interface SubmitResponse {
   correctAnswer: string;
   correctAnswerLabel?: string;
   explanation: string;
+  explanationSource: "ai" | "fallback";
   knowledgePoint: KnowledgePoint;
   userAnswer: string;
   question: QuizQuestion;
@@ -95,6 +97,19 @@ interface LoginResponse {
     username: string;
     displayName: string;
   };
+}
+
+interface AiStatusResponse {
+  enabled: boolean;
+  configured: boolean;
+  provider: "openai" | "deepseek" | "qwen" | "zhipu" | "moonshot";
+  model: string;
+  baseUrl: string;
+  status: "idle" | "ai" | "fallback" | "disabled";
+  lastHttpStatus: number | null;
+  lastError: string | null;
+  lastSuccessAt: string | null;
+  lastAttemptAt: string | null;
 }
 
 const quizModeOptions: Array<{ value: QuizMode; label: string }> = [
@@ -198,6 +213,10 @@ const api = {
       throw new Error(await readErrorMessage(response, "登录失败。"));
     }
 
+    return response.json();
+  },
+  async getAiStatus(): Promise<AiStatusResponse> {
+    const response = await fetch(buildApiUrl("/api/ai-status"));
     return response.json();
   },
   async submitAnswer(payload: {
@@ -309,6 +328,23 @@ function isRetryAnswerCorrect(item: SummaryItem, userAnswer: string) {
   return false;
 }
 
+function getExplanationLabel(source: "ai" | "fallback") {
+  return source === "ai" ? "AI\u89e3\u6790" : "\u57fa\u7840\u8bb2\u89e3";
+}
+
+function getAiStatusLabel(status: AiStatusResponse["status"]) {
+  if (status === "ai") {
+    return "AI";
+  }
+  if (status === "fallback") {
+    return "fallback";
+  }
+  if (status === "disabled") {
+    return "disabled";
+  }
+  return "idle";
+}
+
 function getSegmentPosition(optionCount: number, index: number) {
   return {
     width: `${100 / optionCount}%`,
@@ -341,6 +377,7 @@ function App() {
   const [loggedInUser, setLoggedInUser] = useState<LoginResponse["user"] | null>(null);
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
+  const [aiStatus, setAiStatus] = useState<AiStatusResponse | null>(null);
 
   useEffect(() => {
     void api.getKnowledgePoints().then((items) => {
@@ -349,6 +386,7 @@ function App() {
         setSelectedKnowledgePointId(items[0].id);
       }
     });
+    void api.getAiStatus().then(setAiStatus);
   }, []);
 
   useEffect(() => {
@@ -444,6 +482,7 @@ function App() {
       });
 
       setFeedback(result);
+      setAiStatus(await api.getAiStatus());
       setPendingNextQuestion(result.isFinished ? null : result.nextQuestion);
       setPendingSummary(result.isFinished ? result.summary ?? null : null);
 
@@ -735,6 +774,20 @@ function App() {
             </article>
           </div>
 
+          {aiStatus ? (
+            <div className="ai-status-card">
+              <div className="ai-status-head">
+                <strong>{"AI \u89e3\u6790\u72b6\u6001"}</strong>
+                <span className={`ai-status-badge status-${aiStatus.status}`}>{getAiStatusLabel(aiStatus.status)}</span>
+              </div>
+              <p>{"\u63d0\u4f9b\u5546\uff1a"}{aiStatus.provider}</p>
+              <p>{"\u6a21\u578b\uff1a"}{aiStatus.model}</p>
+              <p>{"\u5df2\u914d\u7f6e\uff1a"}{aiStatus.configured ? "\u662f" : "\u5426"}</p>
+              <p>{"\u6700\u8fd1 HTTP \u72b6\u6001\uff1a"}{aiStatus.lastHttpStatus ?? "\u6682\u65e0"}</p>
+              <p>{"\u6700\u8fd1\u9519\u8bef\uff1a"}{aiStatus.lastError ?? "\u6682\u65e0"}</p>
+            </div>
+          ) : null}
+
           {selectedKnowledgePoint ? (
             <div className="knowledge-card">
               <h3>{selectedKnowledgePoint.name}</h3>
@@ -761,7 +814,7 @@ function App() {
           </div>
 
           {currentQuestion ? (
-            <form onSubmit={handleSubmitAnswer} className="question-card">
+            <form key={currentQuestion.id} onSubmit={handleSubmitAnswer} className="question-card">
               <div className="question-meta">
                 <span>{getSourceTypeLabel(currentQuestion.sourceType)}</span>
                 <span>{currentQuestion.knowledgePointName}</span>
@@ -809,7 +862,7 @@ function App() {
               <p>你的答案：{feedback.userAnswer || "未填写"}</p>
               <p>正确答案：{formatCorrectAnswer(feedback.correctAnswer, feedback.correctAnswerLabel)}</p>
               <p>考点：{feedback.knowledgePoint.name}</p>
-              <p>讲解：{feedback.explanation}</p>
+              <p>{getExplanationLabel(feedback.explanationSource)}：{feedback.explanation}</p>
               <button type="button" className="secondary-action retry-next-btn" onClick={handleContinueToNext}>
                 {pendingSummary ? "查看结果" : "下一题"}
               </button>
@@ -858,7 +911,7 @@ function App() {
                     <p>你的答案：{item.userAnswer || "未填写"}</p>
                     <p>正确答案：{formatCorrectAnswer(item.correctAnswer, item.correctAnswerLabel)}</p>
                     <p>对应考点：{item.knowledgePointName}</p>
-                    <p>讲解：{item.explanation}</p>
+                    <p>{getExplanationLabel(item.explanationSource)}：{item.explanation}</p>
                   </article>
                 ))
               ) : (

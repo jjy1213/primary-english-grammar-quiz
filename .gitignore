@@ -2,6 +2,7 @@ node_modules/
 dist/
 release/
 release-desktop/
+.env
 *.tsbuildinfo
 verification-*.png
 src/server/*.js

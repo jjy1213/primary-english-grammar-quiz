@@ -3,6 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { paths } from "./config.js";
 import { getQuestions, startQuiz, submitQuizAnswer } from "./quizService.js";
+import { setExplanationGeneratorForTests } from "./aiExplanationService.js";
+import { resetExplanationCacheForTests } from "./aiExplanationCache.js";
 import { login } from "./authService.js";
 import { readJsonFile } from "./fsUtils.js";
 import { loadQuestions } from "./contentStore.js";
@@ -13,10 +15,14 @@ describe("quizService", () => {
 
   beforeEach(() => {
     fs.writeFileSync(attemptsFile, "[]", "utf8");
+    setExplanationGeneratorForTests(async () => null);
+    fs.writeFileSync(path.resolve(paths.aiExplanationCache), "{}", "utf8");
+    resetExplanationCacheForTests();
   });
 
   afterAll(() => {
     fs.writeFileSync(attemptsFile, attemptsBackup, "utf8");
+    setExplanationGeneratorForTests(null);
   });
 
   it("filters questions by knowledge point", () => {
@@ -43,10 +49,10 @@ describe("quizService", () => {
     expect(quiz.currentQuestion?.sourceType).toBe("cloze");
   });
 
-  it("returns feedback for a correct choice answer", () => {
+  it("returns feedback for a correct choice answer", async () => {
     const quiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-preposition-time", questionCount: 1 });
     const current = quiz.currentQuestion!;
-    const result = submitQuizAnswer({
+    const result = await submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
       userAnswer: "on"
@@ -57,7 +63,7 @@ describe("quizService", () => {
     expect(result.summary?.correctCount).toBe(1);
   });
 
-  it("accepts choice option text when the stored answer is a letter", () => {
+  it("accepts choice option text when the stored answer is a letter", async () => {
     const sourceQuestion = loadQuestions().find(
       (item) => item.sourceType === "choice" && /^[A-D]$/i.test(item.answer) && item.options?.length
     );
@@ -76,7 +82,7 @@ describe("quizService", () => {
 
     expect(quiz.currentQuestion).not.toBeNull();
 
-    const result = submitQuizAnswer({
+    const result = await submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: quiz.currentQuestion!.id,
       userAnswer:
@@ -93,10 +99,10 @@ describe("quizService", () => {
     }
   });
 
-  it("ignores spaces and case for cloze answers", () => {
+  it("ignores spaces and case for cloze answers", async () => {
     const quiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-like-v-ing", questionCount: 1 });
     const current = quiz.currentQuestion!;
-    const result = submitQuizAnswer({
+    const result = await submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
       userAnswer: "  ReAdInG "
@@ -106,7 +112,7 @@ describe("quizService", () => {
     expect(result.isFinished).toBe(true);
   });
 
-  it("accepts slash alternatives and comma-separated blanks for cloze answers", () => {
+  it("accepts slash alternatives and comma-separated blanks for cloze answers", async () => {
     const sourceQuestion = loadQuestions().find((item) => item.answer === "bad for/harmful to");
 
     expect(sourceQuestion).toBeDefined();
@@ -120,7 +126,7 @@ describe("quizService", () => {
 
     let current = quiz.currentQuestion!;
     while (current.id !== sourceQuestion!.id) {
-      const result = submitQuizAnswer({
+      const result = await submitQuizAnswer({
         sessionId: quiz.sessionId,
         questionId: current.id,
         userAnswer: "wrong"
@@ -128,7 +134,7 @@ describe("quizService", () => {
       current = result.nextQuestion!;
     }
 
-    const result = submitQuizAnswer({
+    const result = await submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
       userAnswer: "harmful,to"
@@ -137,14 +143,19 @@ describe("quizService", () => {
     expect(result.isCorrect).toBe(true);
   });
 
-  it("returns incorrect summary items when the answer is wrong", () => {
+  it("returns incorrect summary items when the answer is wrong", async () => {
     const quiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-pronoun", questionCount: 1 });
     const current = quiz.currentQuestion!;
+    const currentQuestionData = loadQuestions().find((item) => item.id === current.id);
+    const correctChoiceText =
+      current.sourceType === "choice" && currentQuestionData?.options?.length && /^[A-D]$/i.test(currentQuestionData.answer)
+        ? currentQuestionData.options[currentQuestionData.answer.toUpperCase().charCodeAt(0) - 65]
+        : currentQuestionData?.answer;
     const wrongAnswer =
       current.sourceType === "choice"
-        ? current.options?.find((option) => option !== current.options?.[2]) ?? "wrong"
+        ? current.options?.find((option) => option !== correctChoiceText) ?? "wrong"
         : "wrong";
-    const result = submitQuizAnswer({
+    const result = await submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
       userAnswer: wrongAnswer
@@ -155,11 +166,11 @@ describe("quizService", () => {
     expect(result.summary?.items[0].isCorrect).toBe(false);
   });
 
-  it("returns only wrong items in the summary", () => {
+  it("returns only wrong items in the summary", async () => {
     const quiz = startQuiz({ mode: "random", questionCount: 3 });
 
     let current = quiz.currentQuestion!;
-    let result = submitQuizAnswer({
+    let result = await submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
       userAnswer: "wrong"
@@ -170,14 +181,14 @@ describe("quizService", () => {
       current.sourceType === "choice"
         ? current.options?.[0] ?? "wrong"
         : "wrong";
-    result = submitQuizAnswer({
+    result = await submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
       userAnswer: secondAnswer
     });
 
     current = result.nextQuestion!;
-    result = submitQuizAnswer({
+    result = await submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
       userAnswer: "wrong"
@@ -200,10 +211,10 @@ describe("quizService", () => {
     expect(ids.has("kp-be-verb")).toBe(true);
   });
 
-  it("saves attempts after submission", () => {
+  it("saves attempts after submission", async () => {
     const quiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-be-verb", questionCount: 1 });
     const current = quiz.currentQuestion!;
-    submitQuizAnswer({
+    await submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
       userAnswer: "wrong"
@@ -213,5 +224,51 @@ describe("quizService", () => {
     expect(attempts).toHaveLength(1);
     expect(attempts[0].questionId).toBe(current.id);
     expect(attempts[0].userAnswer).toBe("wrong");
+  });
+
+  it("uses AI explanation when a generator is configured", async () => {
+    setExplanationGeneratorForTests(async () => ({
+      explanation: "1. 题目在考什么：考介词。\n2. 为什么答案对：Monday morning 要用 on。\n3. 怎么避免下次错：看到具体某一天就优先想 on。",
+      explanationSource: "ai"
+    }));
+
+    const quiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-preposition-time", questionCount: 1 });
+    const current = quiz.currentQuestion!;
+    const result = await submitQuizAnswer({
+      sessionId: quiz.sessionId,
+      questionId: current.id,
+      userAnswer: "on"
+    });
+
+    expect(result.explanationSource).toBe("ai");
+    expect(result.explanation).toContain("题目在考什么");
+  });
+
+  it("reuses cached AI explanations for the same answer context", async () => {
+    let callCount = 0;
+    setExplanationGeneratorForTests(async () => {
+      callCount += 1;
+      return {
+        explanation: "1. 这题在考什么：考介词。\n2. 为什么这个答案对：Monday morning 要用 on。\n3. 下次怎么更快看出来：看到具体某一天就先想 on。",
+        explanationSource: "ai"
+      };
+    });
+
+    const firstQuiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-preposition-time", questionCount: 1 });
+    await submitQuizAnswer({
+      sessionId: firstQuiz.sessionId,
+      questionId: firstQuiz.currentQuestion!.id,
+      userAnswer: "on"
+    });
+
+    const secondQuiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-preposition-time", questionCount: 1 });
+    const secondResult = await submitQuizAnswer({
+      sessionId: secondQuiz.sessionId,
+      questionId: secondQuiz.currentQuestion!.id,
+      userAnswer: "on"
+    });
+
+    expect(callCount).toBe(1);
+    expect(secondResult.explanationSource).toBe("ai");
   });
 });

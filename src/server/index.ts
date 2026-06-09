@@ -3,6 +3,7 @@ import express from "express";
 import { ensureAppFiles } from "./fsUtils.js";
 import { appConfig } from "./config.js";
 import { getAttemptById } from "./attemptStore.js";
+import { getAiRuntimeStatus } from "./aiExplanationService.js";
 import { login } from "./authService.js";
 import { getKnowledgePoints, getQuestions, startQuiz, submitQuizAnswer } from "./quizService.js";
 import { loginSchema, startQuizSchema, submitQuizSchema } from "./validation.js";
@@ -15,6 +16,10 @@ app.use(express.json());
 
 app.get("/api/status", (_req, res) => {
   res.json({ ok: true });
+});
+
+app.get("/api/ai-status", (_req, res) => {
+  res.json(getAiRuntimeStatus());
 });
 
 app.get("/api/knowledge-points", (_req, res) => {
@@ -73,7 +78,7 @@ app.post("/api/quiz/start", (req, res) => {
   }
 });
 
-app.post("/api/quiz/submit", (req, res) => {
+app.post("/api/quiz/submit", async (req, res) => {
   const parsed = submitQuizSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: parsed.error.flatten() });
@@ -81,7 +86,7 @@ app.post("/api/quiz/submit", (req, res) => {
   }
 
   try {
-    res.json(submitQuizAnswer(parsed.data));
+    res.json(await submitQuizAnswer(parsed.data));
   } catch (error) {
     res.status(400).json({
       error: error instanceof Error ? error.message : "Unable to submit answer."
