@@ -1,22 +1,23 @@
-# 小学生英语语法测试
+# 小学生英语语法测验
 
 一个面向中文使用场景的英语语法练习项目，支持 Web 使用，也支持封装成 Windows 桌面应用。
 
-它适合这样几类需求：
-- 想快速搭一个可用的英语语法练习站
-- 想把真题里的选择题、填空题整理成可练习题库
-- 想保留“题目 + 答案 + 考点 + 讲解”的完整结构
-- 想继续扩充知识库，而不是把题目和考点写死在页面里
+它适合这些场景：
+
+- 快速搭建一个可用的英语语法练习站
+- 把真题中的选择题、填空题整理成可练习题库
+- 保留“题目 + 答案 + 考点 + 讲解”的完整结构
+- 持续扩展题库和知识点，而不是把内容写死在页面里
 
 ## 项目亮点
 
 - 支持选择题、填空题两种核心题型
 - 支持随机练习、按考点练习
-- 支持自定义练习题数
+- 支持自定义每轮练习题数
 - 每题提交后立即反馈对错、正确答案、考点和讲解
-- 结果汇总展示整轮全部题目
+- 结果汇总展示整轮错题
 - 内置错题再练模块
-- 题库、知识库、作答记录分离存储
+- 题库、知识点、作答记录分离存储
 - 支持后续持续扩库和导题
 
 ## 快速开始
@@ -34,6 +35,7 @@ npm run dev
 ```
 
 启动后访问：
+
 - 前端：`http://localhost:4175`
 - 后端：`http://localhost:4310`
 
@@ -49,9 +51,42 @@ npm test
 npm run build
 ```
 
+## 通过 Cloudflare Tunnel 临时分享访问
+
+如果同一局域网内的其他设备无法直接访问你的本机开发环境，可以使用 Cloudflare Tunnel 生成一个临时公网链接。
+
+### 启动步骤
+
+1. 保持本地开发服务运行：
+
+```bash
+npm run dev
+```
+
+2. 准备 `cloudflared`
+
+可以从 Cloudflare 官方发布页下载 Windows 可执行文件：
+
+- [cloudflared releases](https://github.com/cloudflare/cloudflared/releases)
+
+3. 在另一个终端中启动 Quick Tunnel：
+
+```bash
+cloudflared tunnel --url http://127.0.0.1:4175
+```
+
+4. 终端会输出一个 `https://*.trycloudflare.com` 链接，把这个链接发给其他用户即可访问当前本地页面。
+
+### 常见问题
+
+- 如果页面提示 `host is not allowed`，请确认 `vite.config.ts` 中已经允许 `*.trycloudflare.com`。
+- 关闭本地 `npm run dev` 或关闭 `cloudflared` 后，临时外链会失效。
+- `Quick Tunnel` 适合演示或测试，不适合长期生产使用。
+- 如果需要固定域名或长期外链，请改用 Cloudflare Named Tunnel 或正式部署。
+
 ## 桌面版支持
 
-如果你想把它作为本地应用来用，可以直接走桌面封装：
+如果你想把它作为本地应用来使用，可以直接运行桌面开发模式：
 
 ```bash
 npm run dev:desktop
@@ -75,19 +110,14 @@ npm run build:desktop
 
 ### 作为二次开发项目
 
-你可以在这个基础上继续加：
+你可以在这个基础上继续增加：
+
 - 登录系统
 - 学生记录
 - 错题本
 - 知识点管理后台
 - 更复杂的判题规则
 - 在线部署版本
-
-## 开源协议
-
-本项目基于 [MIT License](./LICENSE) 开源。
-
-你可以自由使用、修改、分发和二次开发，但需要保留原始版权和许可证声明。
 
 ## 当前功能
 
@@ -100,7 +130,7 @@ npm run build:desktop
 - 结果汇总
 - 错题再练
 - 本地作答记录保存
-- 本地 JSON 题库和知识库读取
+- 本地 JSON 题库和知识点读取
 - Electron 桌面壳
 
 ## 技术栈
@@ -140,6 +170,7 @@ npm run dev
 ```
 
 默认地址：
+
 - 前端：`http://localhost:4175`
 - 后端：`http://localhost:4310`
 
@@ -150,6 +181,7 @@ npm run dev:desktop
 ```
 
 这个命令会同时启动：
+
 - Express 后端
 - Vite 前端
 - Electron 桌面窗口
@@ -161,6 +193,7 @@ npm run build
 ```
 
 输出目录：
+
 - 前端静态文件：`dist/`
 - 后端构建文件：`dist/server/`
 
@@ -177,6 +210,7 @@ npm run build:desktop
 ```
 
 默认输出目录：
+
 - `release/`
 
 ### 运行测试
@@ -235,6 +269,7 @@ primary-english-grammar-quiz/
 运行时题库文件，前后端练习流程直接读取这里的数据。
 
 主要字段：
+
 - `id`
 - `sourceType`
 - `stem`
@@ -248,9 +283,10 @@ primary-english-grammar-quiz/
 
 ### `data/knowledge-points.json`
 
-运行时知识库文件。
+运行时知识点文件。
 
 主要字段：
+
 - `id`
 - `name`
 - `category`
@@ -271,6 +307,7 @@ primary-english-grammar-quiz/
 `question-bank/` 是题库整理工作区，不是前端运行时直接读取的目录。
 
 主要用途：
+
 - `raw-exams/`：原始试卷文件
 - `parsed/`：原始文件转出的中间文本
 - `questions-text/`：拆分后的题目文本
@@ -291,6 +328,7 @@ primary-english-grammar-quiz/
 6. 校验后同步到 `data/questions.json` 和 `data/knowledge-points.json`
 
 相关脚本：
+
 - `node scripts/process-question-bank.mjs`
 - `node scripts/generate-manual-overrides.mjs`
 - `node scripts/generate-legacy-overrides.mjs`
@@ -307,6 +345,10 @@ primary-english-grammar-quiz/
 
 - 忽略首尾空格
 - 忽略大小写
+
+## 开源协议
+
+本项目基于 [MIT License](./LICENSE) 开源。
 
 ## 仓库地址
 
