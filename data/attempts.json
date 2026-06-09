@@ -394,5 +394,95 @@
     "isCorrect": true,
     "correctAnswer": "A",
     "knowledgePointId": "kp-mixed"
+  },
+  {
+    "id": "ecd76733-6d72-4e7b-9dbf-07141c0bdde1",
+    "submittedAt": "2026-06-09T03:41:05.319Z",
+    "questionId": "sh-2019-part2-choice-43",
+    "userAnswer": "safe",
+    "isCorrect": true,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-adjective-adverb"
+  },
+  {
+    "id": "d0aef62d-f58e-438d-a411-57b93187ff71",
+    "submittedAt": "2026-06-09T03:43:41.314Z",
+    "questionId": "sh-2016-part2-choice-28",
+    "userAnswer": "at",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-preposition"
+  },
+  {
+    "id": "294c6c3e-9b21-4738-a545-4dec8defa8e1",
+    "submittedAt": "2026-06-09T03:44:47.001Z",
+    "questionId": "sh-2013-part2-choice-41",
+    "userAnswer": "clearly",
+    "isCorrect": true,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-comparative"
+  },
+  {
+    "id": "94d0d978-b251-4320-a94f-e80c95f25cb7",
+    "submittedAt": "2026-06-09T03:44:51.660Z",
+    "questionId": "sh-2014-part2-choice-37",
+    "userAnswer": "since",
+    "isCorrect": false,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-conjunction"
+  },
+  {
+    "id": "95bd3b3d-fa2d-4fbe-b70e-d17659d985e0",
+    "submittedAt": "2026-06-09T03:44:54.763Z",
+    "questionId": "sh-2011-part2-choice-42",
+    "userAnswer": "moved",
+    "isCorrect": false,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "48ce0ee3-fa70-41e8-b6ca-5c0a51fbb077",
+    "submittedAt": "2026-06-09T03:45:07.724Z",
+    "questionId": "sh-2014-part2-choice-38",
+    "userAnswer": "came",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "b7aab88c-b709-493d-a176-7f9bb78d800c",
+    "submittedAt": "2026-06-09T03:45:12.027Z",
+    "questionId": "sh-2019-part2-choice-26",
+    "userAnswer": "present",
+    "isCorrect": false,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-mixed"
+  },
+  {
+    "id": "3c89b6b1-0d3a-4ef6-9ecf-c98f4ced371d",
+    "submittedAt": "2026-06-09T04:09:42.551Z",
+    "questionId": "sh-2015-part2-choice-27",
+    "userAnswer": "me",
+    "isCorrect": false,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-pronoun"
+  },
+  {
+    "id": "6230c5be-13fe-498c-9bf5-9b31c728694f",
+    "submittedAt": "2026-06-09T04:11:23.207Z",
+    "questionId": "sh-2008-part2-choice-49",
+    "userAnswer": "famous for",
+    "isCorrect": false,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-nonfinite"
+  },
+  {
+    "id": "93196355-b90c-4c9d-b888-179a36af95ed",
+    "submittedAt": "2026-06-09T04:12:21.669Z",
+    "questionId": "sh-2015-part2-cloze-53",
+    "userAnswer": "medicines",
+    "isCorrect": false,
+    "correctAnswer": "depends on",
+    "knowledgePointId": "kp-word-formation"
   }
 ]
