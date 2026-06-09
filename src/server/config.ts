@@ -18,5 +18,6 @@ export const paths = {
   dataDir: dataRoot,
   questions: path.join(dataRoot, "questions.json"),
   knowledgePoints: path.join(dataRoot, "knowledge-points.json"),
-  attempts: path.join(dataRoot, "attempts.json")
+  attempts: path.join(dataRoot, "attempts.json"),
+  users: path.join(dataRoot, "users.json")
 };

@@ -9,6 +9,7 @@ export function ensureAppFiles() {
 
   copySeedFileIfMissing("knowledge-points.json");
   copySeedFileIfMissing("questions.json");
+  copySeedFileIfMissing("users.json");
 
   if (!fs.existsSync(paths.attempts)) {
     fs.writeFileSync(paths.attempts, "[]", "utf8");

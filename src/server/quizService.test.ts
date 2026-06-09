@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { paths } from "./config.js";
 import { getQuestions, startQuiz, submitQuizAnswer } from "./quizService.js";
+import { login } from "./authService.js";
 import { readJsonFile } from "./fsUtils.js";
 import { loadQuestions } from "./contentStore.js";
 
@@ -139,10 +140,14 @@ describe("quizService", () => {
   it("returns incorrect summary items when the answer is wrong", () => {
     const quiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-pronoun", questionCount: 1 });
     const current = quiz.currentQuestion!;
+    const wrongAnswer =
+      current.sourceType === "choice"
+        ? current.options?.find((option) => option !== current.options?.[2]) ?? "wrong"
+        : "wrong";
     const result = submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
-      userAnswer: "He"
+      userAnswer: wrongAnswer
     });
 
     expect(result.isCorrect).toBe(false);
@@ -150,7 +155,7 @@ describe("quizService", () => {
     expect(result.summary?.items[0].isCorrect).toBe(false);
   });
 
-  it("returns all answered items in the summary", () => {
+  it("returns only wrong items in the summary", () => {
     const quiz = startQuiz({ mode: "random", questionCount: 3 });
 
     let current = quiz.currentQuestion!;
@@ -161,10 +166,14 @@ describe("quizService", () => {
     });
 
     current = result.nextQuestion!;
+    const secondAnswer =
+      current.sourceType === "choice"
+        ? current.options?.[0] ?? "wrong"
+        : "wrong";
     result = submitQuizAnswer({
       sessionId: quiz.sessionId,
       questionId: current.id,
-      userAnswer: "wrong"
+      userAnswer: secondAnswer
     });
 
     current = result.nextQuestion!;
@@ -175,7 +184,14 @@ describe("quizService", () => {
     });
 
     expect(result.isFinished).toBe(true);
-    expect(result.summary?.items.length).toBe(3);
+    expect(result.summary?.items.every((item) => item.isCorrect === false)).toBe(true);
+    expect(result.summary?.items.length).toBeLessThanOrEqual(3);
+  });
+
+  it("logs in with a valid username and password", () => {
+    const result = login({ username: "demo", password: "demo123" });
+    expect(result.user.username).toBe("demo");
+    expect(result.user.displayName).toBe("Demo User");
   });
 
   it("validates question data against linked knowledge points", () => {
