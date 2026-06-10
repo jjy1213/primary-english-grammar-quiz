@@ -2113,5 +2113,122 @@
     "isCorrect": true,
     "correctAnswer": "B",
     "knowledgePointId": "kp-comparative"
+  },
+  {
+    "id": "808f1320-9db7-4b08-8cdc-7b3757c48b85",
+    "submittedAt": "2026-06-10T08:14:26.793Z",
+    "questionId": "sh-2020-part2-choice-35",
+    "userAnswer": "lonely",
+    "isCorrect": true,
+    "correctAnswer": "D",
+    "knowledgePointId": "kp-adjective-adverb"
+  },
+  {
+    "id": "9c8eab66-bae2-4758-be2d-f42648436875",
+    "submittedAt": "2026-06-10T08:14:42.644Z",
+    "questionId": "sh-2019-part2-choice-33",
+    "userAnswer": "laugh",
+    "isCorrect": true,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-nonfinite"
+  },
+  {
+    "id": "eb11c925-c0ef-4268-a188-400e1c2e5448",
+    "submittedAt": "2026-06-10T08:15:03.425Z",
+    "questionId": "sh-2018-part2-choice-40",
+    "userAnswer": "lasted",
+    "isCorrect": true,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "4a6239af-f54a-4239-ab50-679d5237f34e",
+    "submittedAt": "2026-06-10T08:15:20.174Z",
+    "questionId": "sh-2011-part2-choice-56",
+    "userAnswer": "Enjoy your time",
+    "isCorrect": true,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-nonfinite"
+  },
+  {
+    "id": "c8cc292e-658c-48cb-b053-6e6c74bcfc94",
+    "submittedAt": "2026-06-10T08:15:25.248Z",
+    "questionId": "sh-2021-part2-choice-22",
+    "userAnswer": "yours",
+    "isCorrect": true,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-pronoun"
+  },
+  {
+    "id": "7874b5ba-af33-4cb0-af17-7cac7ad15dda",
+    "submittedAt": "2026-06-10T08:17:23.080Z",
+    "questionId": "sh-2009-part2-choice-54",
+    "userAnswer": "Go ahead",
+    "isCorrect": false,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-word-formation"
+  },
+  {
+    "id": "1a07690f-d5af-4980-96f8-a26afb7c31aa",
+    "submittedAt": "2026-06-10T08:18:26.205Z",
+    "questionId": "sh-2021-part2-choice-30",
+    "userAnswer": "play",
+    "isCorrect": false,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-nonfinite"
+  },
+  {
+    "id": "95d4e935-f229-4140-8d16-f41998ea6a8b",
+    "submittedAt": "2026-06-10T08:18:45.313Z",
+    "questionId": "sh-2014-part2-choice-44",
+    "userAnswer": "Sure. I will",
+    "isCorrect": true,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "7b80f305-e46d-4d74-b49e-5bea59e360c3",
+    "submittedAt": "2026-06-10T08:19:25.470Z",
+    "questionId": "sh-2010-part2-choice-48",
+    "userAnswer": "when we should arrive at the airport",
+    "isCorrect": true,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "30683cab-517a-4072-a954-ea556f44e0ef",
+    "submittedAt": "2026-06-10T08:19:45.330Z",
+    "questionId": "sh-2014-part2-choice-38",
+    "userAnswer": "comes",
+    "isCorrect": true,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "3c065125-caeb-477b-8281-346f7f906b92",
+    "submittedAt": "2026-06-10T08:20:51.370Z",
+    "questionId": "sh-2016-part2-choice-38",
+    "userAnswer": "bought",
+    "isCorrect": true,
+    "correctAnswer": "B",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "fdca87cf-3ae5-4b60-be7f-9cfba80d69d7",
+    "submittedAt": "2026-06-10T08:21:03.613Z",
+    "questionId": "sh-2011-part2-choice-42",
+    "userAnswer": "will move",
+    "isCorrect": true,
+    "correctAnswer": "C",
+    "knowledgePointId": "kp-tense"
+  },
+  {
+    "id": "774766c8-cc05-44ec-8211-274ea95bf2f6",
+    "submittedAt": "2026-06-10T08:21:12.987Z",
+    "questionId": "sh-2009-part2-choice-39",
+    "userAnswer": "comes",
+    "isCorrect": true,
+    "correctAnswer": "A",
+    "knowledgePointId": "kp-tense"
   }
 ]

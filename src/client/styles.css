@@ -507,9 +507,33 @@ select:focus {
   border: 2px solid var(--line);
 }
 
-.count-stepper strong {
-  font-size: 2rem;
-  line-height: 1;
+.count-input-wrap {
+  flex: 1;
+}
+
+.count-input-wrap input {
+  width: 100%;
+  max-width: 110px;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text);
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  padding: 10px 12px;
+}
+
+.count-input-wrap input::-webkit-outer-spin-button,
+.count-input-wrap input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.count-input-wrap input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .stepper-button {

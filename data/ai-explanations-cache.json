@@ -2,6 +2,46 @@
   "{\"questionId\":\"q-002\",\"stem\":\"We have an English class ____ Monday morning.\",\"options\":[\"in\",\"on\",\"at\",\"for\"],\"correctAnswer\":\"on\",\"correctAnswerLabel\":\"on\",\"knowledgePointId\":\"kp-preposition-time\",\"knowledgePointName\":\"时间介词\",\"userAnswer\":\"on\",\"isCorrect\":true}": {
     "explanation": "Cached AI explanation",
     "explanationSource": "ai",
-    "updatedAt": "2026-06-10T07:56:51.689Z"
+    "updatedAt": "2026-06-10T07:04:46.347Z"
+  },
+  "{\"questionId\":\"sh-2016-part2-choice-39\",\"stem\":\"This medicine ______ millions of people's lives since it was put into use.\",\"options\":[\"is saving\",\"will save\",\"has saved\",\"had saved\"],\"correctAnswer\":\"C\",\"correctAnswerLabel\":\"has saved\",\"knowledgePointId\":\"kp-passive-voice\",\"knowledgePointName\":\"被动语态\",\"userAnswer\":\"had saved\",\"isCorrect\":false}": {
+    "explanation": "哇，你已经很认真在思考这道题了，虽然这次选得不太对，但别灰心，我们一起来把“现在完成时”这个小秘密弄清楚吧！  \n\n1. **关键线索：看到“since”就想起“持续到现在”**  \n   句子里有 **“since it was put into use”**，意思是“从被投入使用开始一直到现在”。在英语里，**since + 过去时间点**，主句常常用“现在完成时”，表示动作从过去一直延续到现在。  \n\n2. **“had saved”错在哪里？**  \n   你选了 **had saved**，这是“过去完成时”。过去完成时需要一个更早的过去动作作为“参考点”，比如“在它被投入使用之前，已经拯救了……”。但这句里 **“since it was put into use”** 并不是更早的参考点，而是动作开始的时间，所以不能用过去完成时。  \n\n3. **正确选择“has saved”为什么对？**  \n   **has saved** 是现在完成时（have/has + 过去分词），它正好用来表达“从过去某时间开始一直到现在”，并且现在仍在发挥作用。这句意思是“这个药自从投入使用以来，已经拯救了数百万人的生命”——到现在都有效，所以用现在完成时。  \n\n4. **小提示：注意动作是否“持续到说话时”**  \n   如果动作还在继续，或者结果现在仍重要，就用现在完成时。如果动作是在过去的过去结束，与现在无关，才用过去完成时。这里药效显然现在还有用，所以 **has saved** 最合适。  \n\n下次看到 **since** 或者 **for + 时间段**，记得优先想一想“现在完成时”哦！你已经很棒了，继续加油！",
+    "explanationSource": "ai",
+    "updatedAt": "2026-06-10T07:08:40.573Z"
+  },
+  "{\"questionId\":\"sh-2013-part2-choice-50\",\"stem\":\"-- We'll study in different schools next term. Enjoy your time in the new school!\\n-- ______\",\"options\":[\"I'll take your advice.\",\"The same to you.\",\"Congratulations!\",\"Me too.\"],\"correctAnswer\":\"B\",\"correctAnswerLabel\":\"The same to you.\",\"knowledgePointId\":\"kp-nonfinite\",\"knowledgePointName\":\"非谓语动词\",\"userAnswer\":\"Congratulations!\",\"isCorrect\":false}": {
+    "explanation": "哇，小朋友，这道题你选错了，不过没关系，我们一起来看看它到底在说什么，下次就不会掉进小陷阱啦！\n\n1. **先看题目在说什么**  \n   第一句说“下个学期我们要到不同学校学习了，祝你在新学校过得开心！”这是一句告别和祝福的话。对方应该怎么回答呢？\n\n2. **你的答案“Congratulations!”是祝贺**  \n   “Congratulations!”是别人取得了好成绩或值得庆祝的事情才用的。比如同学考了满分，你说“Congratulations!” 但这里只是换学校，不是获奖，所以不恰当。\n\n3. **正确选项“The same to you.”是“也祝你一样”**  \n   这句话是当别人祝福你时，你回祝对方相同的心意。注意信号词“Enjoy your time”，这是祝福，所以你也应该祝福回去。\n\n4. **其他选项的悄悄话**  \n   “I'll take your advice.”（我会接受你的建议）——对方没提建议，只是祝福，所以不对。  \n   “Me too.”（我也是）——这里不是表达“我也是”的场合。\n\n5. **小总结**  \n   遇到别人送祝福，比如“Happy birthday!”“Have fun!”，我们可以用“The same to you!”或“You too!”来回应。记住这个小规律，以后就不会错啦！",
+    "explanationSource": "ai",
+    "updatedAt": "2026-06-10T07:09:18.819Z"
+  },
+  "{\"questionId\":\"sh-2019-part2-choice-28\",\"stem\":\"We communicate ______ each other in many ways, such as by e-mail or by phone.\",\"options\":[\"on\",\"through\",\"in\",\"with\"],\"correctAnswer\":\"D\",\"correctAnswerLabel\":\"with\",\"knowledgePointId\":\"kp-preposition\",\"knowledgePointName\":\"介词\",\"userAnswer\":\"on\",\"isCorrect\":false}": {
+    "explanation": "哇，这道题其实有个小陷阱，不过别担心，我们一起来把它看清吧！\n\n1. **记好小搭档**  \n   “communicate”这个单词，和谁“说话”一定要用“with”来牵线——表示“和……交流”。所以“communicate with each other”就是“和彼此交流”的意思哦。\n\n2. **想一想，你选“on”时可能怎么想的？**  \n   你可能想到“打电话用on the phone”，但这里说的是“和对方交流”，而不是“在手机/电脑上”。如果句子是“We communicate on the phone”才用on，可这里后面跟着“each other”（彼此），所以要用表示“和”的with才对。\n\n3. **其他选项的小提示**  \n   - **through**：指“通过某个中间工具/方式”，比如“through email”（通过电子邮件）。  \n   - **in**：常跟语言搭配，比如“in English”（用英语）。  \n   - **on**：常跟具体设备搭配，比如“on the phone/on the computer”。  \n   而本句需要的是“和谁”的介词，所以只有 **with** 最合适。\n\n4. **再来一次口诀**  \n   “和朋友交流，with牵着手；通过工具用through，说语言用in，具体设备试试on。”  \n   下次看到“communicate ______ each other”，记得先试试 **with** 哦！",
+    "explanationSource": "ai",
+    "updatedAt": "2026-06-10T07:13:25.918Z"
+  },
+  "{\"questionId\":\"sh-2020-part2-choice-27\",\"stem\":\"Kelly's cheese cakes were sold out within half ______ hour at the night market.\",\"options\":[\"a\",\"an\",\"the\",\"/\"],\"correctAnswer\":\"B\",\"correctAnswerLabel\":\"an\",\"knowledgePointId\":\"kp-article\",\"knowledgePointName\":\"冠词\",\"userAnswer\":\"a\",\"isCorrect\":false}": {
+    "explanation": "哇，这道题藏着一个发音小秘密呢！我们一起看看怎么选最准确吧~\n\n1. **听声音，不是看字母**  \n   “hour” 的第一个字母 h 不发音，它读作 /ˈaʊər/，开头是元音音素，所以前面要用 **an**，而不是 a。\n\n2. **小提醒：什么时候用 a？**  \n   如果单词开头是辅音音素，比如 “a half” 中的 half 读作 /hæf/，h 发音了，是辅音，就用 a。而 hour 的 h 不发音，就不一样啦。\n\n3. **你的选择“a”**  \n   你选了 a，可能是看到 h 就按字母判断了。记住：要听单词的第一个声音，不是看第一个字母哦！像 honest, honor 也是用 an。\n\n4. **其他选项为什么不选？**  \n   “the”是特指某个小时，这里没有特指；“/”是不填冠词，但代表半个“一个小时”必须加 a 或 an。所以只有 an 正确。\n\n你离正确答案只有一步之遥，下次听声音就稳稳的！加油~ 😊",
+    "explanationSource": "ai",
+    "updatedAt": "2026-06-10T07:20:37.144Z"
+  },
+  "{\"questionId\":\"sh-2012-part2-choice-43\",\"stem\":\"-- ______ do millions of online users visit the home page of the government?\\n-- To read the news and search for the information they need.\",\"options\":[\"When\",\"Where\",\"Why\",\"What\"],\"correctAnswer\":\"C\",\"correctAnswerLabel\":\"Why\",\"knowledgePointId\":\"kp-exclamation\",\"knowledgePointName\":\"感叹句\",\"userAnswer\":\"Where\",\"isCorrect\":false}": {
+    "explanation": "小朋友们，我们来一起看看这道题，找找哪里想岔啦！\n\n1. 先看回答：回答是“To read the news...”，开头有个“To”，意思是“为了……”，这是在告诉我们**目的**或**原因**。所以前面的问句应该问“为什么”。\n\n2. 问“为什么”要用哪个词呢？——对啦，就是 **Why**（为什么）。所以正确答案是 C（Why）。\n\n3. 你选的是 **Where**（哪里），但是“哪里”是问地点的。比如问“Where do you go?”就要回答一个地方，比如“to the library”。可这里回答的是“为了读新闻”，不是地方哦，所以 Where 不合适。\n\n4. 记住一个小信号：如果回答里出现了 **“To + 动词”**（比如 To read），前面的问句多半是 **Why**。下次看到 To 开头，就可以猜到问的是“为什么”啦！\n\n5. 你只是差了一点点思路，特别好的是你认真读完了句子！下次再遇到这类题，先看看回答的**开头**，这样就能选对啦。加油哦！",
+    "explanationSource": "ai",
+    "updatedAt": "2026-06-10T07:21:36.345Z"
+  },
+  "{\"questionId\":\"sh-2020-part2-choice-35\",\"stem\":\"Emma felt ______ when her parents were on business trips.\",\"options\":[\"sadly\",\"angrily\",\"unfortunately\",\"lonely\"],\"correctAnswer\":\"D\",\"correctAnswerLabel\":\"lonely\",\"knowledgePointId\":\"kp-adjective-adverb\",\"knowledgePointName\":\"形容词和副词\",\"userAnswer\":\"lonely\",\"isCorrect\":true}": {
+    "explanation": "太棒了，你选对了！我们来看看为什么“lonely”是这里的小明星。\n\n1. **小提示：看“felt”这个魔法词**  \n   “felt”是“感觉”的意思，它后面要跟一个**形容词**，就像“高兴的”“难过的”。形容词只描述状态，不说“怎样地做”。\n\n2. **其他三个词都是“-ly”副词**  \n   “sadly”“angrily”“unfortunately”都是副词，它们用来修饰动作，比如“她伤心地哭了”。但在“felt”后面用它们，就像给句子穿错了鞋子——不舒服。\n\n3. **“lonely”是形容词，正合适**  \n   虽然它也以“ly”结尾，但它真的是形容词，意思是“孤独的”。当父母出差时，艾玛感到的是“孤独”这种心情，不是“孤独地做什么”。\n\n4. **句子意思连一连**  \n   整句话：“当父母出差时，艾玛感到______。” 只有“lonely（孤独的）”能放进这个空里，让句子读起来自然又准确。\n\n你选对了，真棒！继续像这样细心地想问题，你就是语法小侦探啦！",
+    "explanationSource": "ai",
+    "updatedAt": "2026-06-10T08:15:49.919Z"
+  },
+  "{\"questionId\":\"sh-2014-part2-choice-38\",\"stem\":\"Aunt Lucy will tell us something about her trip to Australia when she ______ back.\",\"options\":[\"came\",\"comes\",\"would come\",\"will come\"],\"correctAnswer\":\"B\",\"correctAnswerLabel\":\"comes\",\"knowledgePointId\":\"kp-tense\",\"knowledgePointName\":\"时态\",\"userAnswer\":\"comes\",\"isCorrect\":true}": {
+    "explanation": "哇，你真是太棒了，答对啦！🎉 下面老师来给你讲一讲为什么选“comes”最合适。\n\n1. **找找小信号**：句子前面有“will tell”（将会讲），这是将来的动作；而“when”就像一个小闹钟，提示后面跟着的是一般现在时，不是将来时。\n\n2. **记住“主将从现”小口诀**：主句用将来时（will tell），时间词“when”引导的小句子要用一般现在时（comes）。就像“明天如果下雨，我就不去公园”——“下雨”用一般现在时哦。\n\n3. **排除其他选项**：  \n   - “came”是过去式，和“will tell”时间不一致。  \n   - “would come”和“will come”都是将来形式，不能在“when”后面重复用将来时。  \n   所以只有“comes”最合适，表示“当她回来时”。\n\n4. **小总结**：看到“when”连接将来事情，记得后面动词用一般现在时（三单加s），这就是正确的语法小秘密啦！🌟",
+    "explanationSource": "ai",
+    "updatedAt": "2026-06-10T08:19:58.256Z"
+  },
+  "{\"questionId\":\"sh-2021-part2-choice-30\",\"stem\":\"Michael and his friends practise ______ table tennis after school every day.\",\"options\":[\"play\",\"played\",\"playing\",\"to play\"],\"correctAnswer\":\"C\",\"correctAnswerLabel\":\"playing\",\"knowledgePointId\":\"kp-nonfinite\",\"knowledgePointName\":\"非谓语动词\",\"userAnswer\":\"play\",\"isCorrect\":false}": {
+    "explanation": "哇，这个问题就像一个小机关，我们一起把它拆开看看吧！\n\n1. **关键信号词**：句子里的“practise”就是我们的小信号灯！它告诉我们：后面不能直接跟“play”，而要跟“playing”。记住：**practise + doing**（动词的ing形式）是固定搭配。\n\n2. **想想老朋友**：你以前学过“enjoy doing”“finish doing”对吗？“practise”和它们是好伙伴，后面都要用动词ing形式，比如“practise singing”“practise drawing”。\n\n3. **为什么不能选“play”**：如果把“practise play”放在一起，就好像说“练习玩”——听起来怪怪的，因为缺少了“-ing”这个连接小零件。选B“played”是过去式，和“每往后（every day）”不搭；选D“to play”常跟“want to play”，但“practise”不跟“to”。\n\n4. **你错在哪里**：你选了“play”，可能觉得这是一个普通动词，直接加就行。但每个动词都有自己的小习惯哦！“practise”这个小淘气就是不喜欢原形，它只欢迎“-ing”形式。\n\n5. **搞定答案**：所以正确答案是 **C. playing**——Michael和朋友们每天放学后练习打乒乓球。很棒吧？下次看到“practise”就马上想到“ing”，不会再错啦！",
+    "explanationSource": "ai",
+    "updatedAt": "2026-06-10T08:20:09.018Z"
   }
 }

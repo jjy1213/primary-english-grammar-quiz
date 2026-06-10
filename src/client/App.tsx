@@ -1150,7 +1150,18 @@ function App() {
                   >
                     -
                   </button>
-                  <strong>{resolvedQuestionCount}</strong>
+                  <label className="count-input-wrap">
+                    <input
+                      type="number"
+                      min={1}
+                      max={maxSelectableCount}
+                      inputMode="numeric"
+                      value={questionCountInput}
+                      onChange={(event) => setQuestionCountInput(event.target.value)}
+                      onBlur={() => setQuestionCountInput(String(resolvedQuestionCount))}
+                      aria-label="题目数量"
+                    />
+                  </label>
                   <button
                     type="button"
                     className="stepper-button"
