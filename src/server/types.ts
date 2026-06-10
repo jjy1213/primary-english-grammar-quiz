@@ -88,8 +88,6 @@ export interface QuizSubmitResponse {
   isCorrect: boolean;
   correctAnswer: string;
   correctAnswerLabel?: string;
-  explanation: string;
-  explanationSource: "ai" | "fallback";
   knowledgePoint: KnowledgePoint;
   userAnswer: string;
   question: QuizQuestionPayload;
@@ -120,6 +118,18 @@ export interface QuizSubmitResponse {
       explanationSource: "ai" | "fallback";
     }>;
   };
+}
+
+export interface QuizExplanationResponse {
+  sessionId: string;
+  questionId: string;
+  userAnswer: string;
+  isCorrect: boolean;
+  correctAnswer: string;
+  correctAnswerLabel?: string;
+  explanation: string;
+  explanationSource: "ai" | "fallback";
+  knowledgePoint: KnowledgePoint;
 }
 
 export interface LoginResponse {

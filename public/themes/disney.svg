@@ -1,0 +1,24 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fairy" x1="180" y1="50" x2="1430" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3E7FF"/>
+      <stop offset="0.56" stop-color="#FFE4F8"/>
+      <stop offset="1" stop-color="#FFEAB8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#fairy)"/>
+  <circle cx="800" cy="228" r="84" fill="#FFF7CE" opacity="0.78"/>
+  <g fill="#FFFFFF" opacity="0.55">
+    <circle cx="392" cy="244" r="4"/>
+    <circle cx="456" cy="180" r="3"/>
+    <circle cx="1180" cy="214" r="4"/>
+    <circle cx="1264" cy="268" r="3.2"/>
+    <circle cx="940" cy="128" r="3.4"/>
+  </g>
+  <path d="M632 684H968L930 900H670L632 684Z" fill="#7C6FB8" opacity="0.35"/>
+  <path d="M746 452L800 314L854 452H746Z" fill="#8D7BC9" opacity="0.65"/>
+  <path d="M696 684V532H740V684H696Z" fill="#B7A6F4" opacity="0.58"/>
+  <path d="M860 684V532H904V684H860Z" fill="#B7A6F4" opacity="0.58"/>
+  <path d="M720 532L760 452H840L880 532H720Z" fill="#D7CBFF" opacity="0.72"/>
+  <path d="M0 808C188 780 374 770 556 784C732 798 866 842 1036 840C1224 838 1396 786 1600 800V900H0V808Z" fill="#FFFFFF" opacity="0.28"/>
+</svg>

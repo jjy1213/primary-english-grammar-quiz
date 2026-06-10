@@ -50,10 +50,13 @@ function buildPrompt(input: BuildExplanationInput) {
     "Do not mention that you are an AI.",
     "Prefer short sentences and familiar words.",
     "When useful, point out clue words or grammar signals in the sentence.",
-    "Structure the explanation into 3 short parts using these labels exactly:",
-    "1. 这题在考什么：",
-    "2. 为什么这个答案对：",
-    "3. 下次怎么更快看出来：",
+    "The first line must be a lively opening sentence for a child.",
+    "Vary the opening naturally each time and do not always use the same wording.",
+    "After that opening, output 3 to 5 numbered lines in order.",
+    "Each numbered line should focus on one clear point, and may use a short mini-title when helpful.",
+    "The mini-titles should feel natural for this specific question, not fixed templates.",
+    "Put each numbered point on its own line.",
+    "Do not merge the points into one paragraph.",
     "If the student's answer is wrong, explain where the student's thinking may have gone off.",
     "If the student's answer is correct, praise briefly and still explain the reasoning.",
     "",
@@ -64,6 +67,41 @@ function buildPrompt(input: BuildExplanationInput) {
     `学生答案: ${input.userAnswer || "未作答"}`,
     `是否答对: ${input.isCorrect ? "是" : "否"}`,
     `正确答案: ${correctAnswerDisplay}`
+  ].join("\n");
+}
+
+function buildFallbackExplanation(input: BuildExplanationInput) {
+  const openingOptions = input.isCorrect
+    ? [
+        "你这次抓得很准，我们顺着题目把思路再走一遍。",
+        "这题你答得不错，我们来看看你是怎么判断对的。",
+        "这一题表现很好，我们一起把关键线索记牢。"
+      ]
+    : [
+        "别着急，这题里藏着一个很重要的小线索，我们一起找出来。",
+        "这道题有点像小机关，拆开看就不难了。",
+        "没关系，我们把这题一步一步拆开，你很快就能看懂。"
+      ];
+
+  const opening = openingOptions[Math.abs(input.question.id.length + input.userAnswer.length) % openingOptions.length];
+  const studentAnswer = input.userAnswer.trim() || "还没作答";
+  const correctAnswerDisplay = input.correctAnswerLabel
+    ? `${input.question.answer}（${input.correctAnswerLabel}）`
+    : input.question.answer;
+  const pointTwo = input.isCorrect
+    ? `你这次答对了，说明你已经注意到题目的关键位置了。你的答案是“${studentAnswer}”。`
+    : `你这次容易卡住的地方，多半是在比较“${studentAnswer}”和正确答案时少看了一步。`;
+  const pointFour =
+    input.question.sourceType === "choice"
+      ? "下次先圈出关键词，再把每个选项代回句子里读一遍，通常会更快。"
+      : "下次先看空前空后，再判断时态、单复数或固定搭配，会更稳。";
+
+  return [
+    opening,
+    `1. 先看考点：这题主要考 ${input.knowledgePoint.name}${input.knowledgePoint.description ? `，${input.knowledgePoint.description}` : "。"} `,
+    `2. 这次卡点：${pointTwo}`,
+    `3. 正确思路：正确答案是“${correctAnswerDisplay}”。${input.question.explanation}`,
+    `4. 小提醒：${pointFour}`
   ].join("\n");
 }
 
@@ -105,7 +143,7 @@ async function generateWithOpenAI(input: BuildExplanationInput): Promise<Explana
     },
     body: JSON.stringify({
       model,
-      temperature: 0.3,
+      temperature: 0.7,
       messages: [
         {
           role: "system",
@@ -187,7 +225,7 @@ export async function buildExplanation(input: BuildExplanationInput): Promise<Ex
   }
 
   return {
-    explanation: input.question.explanation,
+    explanation: buildFallbackExplanation(input),
     explanationSource: "fallback"
   };
 }

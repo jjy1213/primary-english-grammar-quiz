@@ -1,0 +1,30 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ocean" x1="200" y1="60" x2="1420" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D5FBFF"/>
+      <stop offset="0.6" stop-color="#9FE5F4"/>
+      <stop offset="1" stop-color="#77C8D5"/>
+    </linearGradient>
+    <radialGradient id="bubble" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(800 320) rotate(90) scale(420 620)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.65"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#ocean)"/>
+  <ellipse cx="800" cy="300" rx="560" ry="260" fill="url(#bubble)"/>
+  <g fill="#FFFFFF" opacity="0.35">
+    <circle cx="270" cy="600" r="28"/>
+    <circle cx="338" cy="522" r="18"/>
+    <circle cx="1260" cy="590" r="26"/>
+    <circle cx="1326" cy="520" r="16"/>
+    <circle cx="1120" cy="420" r="14"/>
+  </g>
+  <path d="M0 724C154 696 308 694 454 712C604 730 740 770 912 764C1118 756 1292 680 1600 704V900H0V724Z" fill="#47A8B5" opacity="0.56"/>
+  <path d="M0 804C150 780 324 782 482 804C666 830 842 860 1046 844C1248 828 1406 768 1600 786V900H0V804Z" fill="#2F7F8F" opacity="0.5"/>
+  <g opacity="0.7">
+    <path d="M164 732C204 710 260 710 300 732C260 754 204 754 164 732Z" fill="#FFCB66"/>
+    <circle cx="520" cy="690" r="22" fill="#7DE3B0"/>
+    <path d="M520 642V738" stroke="#7DE3B0" stroke-width="8" stroke-linecap="round"/>
+    <path d="M1244 720C1290 694 1358 694 1404 720C1358 746 1290 746 1244 720Z" fill="#FFD37C"/>
+  </g>
+</svg>

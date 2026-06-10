@@ -1,0 +1,28 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="180" y1="90" x2="1420" y2="810" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE3EF"/>
+      <stop offset="1" stop-color="#B9ECFF"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="800" y1="540" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B9F28F"/>
+      <stop offset="1" stop-color="#6DCC68"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="1320" cy="150" r="72" fill="#FFF4A8"/>
+  <g fill="#FFFFFF" opacity="0.9">
+    <ellipse cx="280" cy="170" rx="82" ry="38"/>
+    <ellipse cx="338" cy="162" rx="54" ry="30"/>
+    <ellipse cx="1000" cy="220" rx="92" ry="42"/>
+    <ellipse cx="1072" cy="208" rx="58" ry="34"/>
+  </g>
+  <path d="M0 640C138 596 264 576 378 580C496 584 600 625 716 626C852 628 968 574 1110 582C1282 592 1418 678 1600 644V900H0V640Z" fill="url(#hill)"/>
+  <path d="M0 736C118 710 228 704 326 716C474 734 582 798 740 800C892 802 1016 738 1170 732C1326 726 1460 760 1600 736V900H0V736Z" fill="#7FD26F"/>
+  <g opacity="0.45">
+    <circle cx="220" cy="640" r="18" fill="#FF9AB7"/>
+    <circle cx="258" cy="686" r="14" fill="#FFD15C"/>
+    <circle cx="1328" cy="668" r="20" fill="#FF9AB7"/>
+    <circle cx="1390" cy="706" r="13" fill="#FFD15C"/>
+  </g>
+</svg>

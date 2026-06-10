@@ -2,7 +2,7 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { paths } from "./config.js";
-import { getQuestions, startQuiz, submitQuizAnswer } from "./quizService.js";
+import { getQuestions, requestQuizExplanation, startQuiz, submitQuizAnswer } from "./quizService.js";
 import { setExplanationGeneratorForTests } from "./aiExplanationService.js";
 import { resetExplanationCacheForTests } from "./aiExplanationCache.js";
 import { login } from "./authService.js";
@@ -166,7 +166,7 @@ describe("quizService", () => {
     expect(result.summary?.items[0].isCorrect).toBe(false);
   });
 
-  it("returns only wrong items in the summary", async () => {
+  it("returns all answered items in the summary", async () => {
     const quiz = startQuiz({ mode: "random", questionCount: 3 });
 
     let current = quiz.currentQuestion!;
@@ -195,8 +195,9 @@ describe("quizService", () => {
     });
 
     expect(result.isFinished).toBe(true);
-    expect(result.summary?.items.every((item) => item.isCorrect === false)).toBe(true);
-    expect(result.summary?.items.length).toBeLessThanOrEqual(3);
+    expect(result.summary?.items).toHaveLength(3);
+    expect(result.summary?.items.map((item) => item.questionId)).toHaveLength(3);
+    expect(result.summary?.items.some((item) => item.isCorrect === false)).toBe(true);
   });
 
   it("logs in with a valid username and password", () => {
@@ -226,9 +227,10 @@ describe("quizService", () => {
     expect(attempts[0].userAnswer).toBe("wrong");
   });
 
-  it("uses AI explanation when a generator is configured", async () => {
+  it("does not call AI during answer submission", async () => {
+    let callCount = 0;
     setExplanationGeneratorForTests(async () => ({
-      explanation: "1. 题目在考什么：考介词。\n2. 为什么答案对：Monday morning 要用 on。\n3. 怎么避免下次错：看到具体某一天就优先想 on。",
+      explanation: "AI explanation",
       explanationSource: "ai"
     }));
 
@@ -240,8 +242,51 @@ describe("quizService", () => {
       userAnswer: "on"
     });
 
+    expect(result.isCorrect).toBe(true);
+    expect(callCount).toBe(0);
+  });
+
+  it("uses AI explanation only when requested", async () => {
+    setExplanationGeneratorForTests(async () => ({
+      explanation: "Topic -> reason -> tip",
+      explanationSource: "ai"
+    }));
+
+    const quiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-preposition-time", questionCount: 1 });
+    const current = quiz.currentQuestion!;
+    await submitQuizAnswer({
+      sessionId: quiz.sessionId,
+      questionId: current.id,
+      userAnswer: "on"
+    });
+
+    const result = await requestQuizExplanation({
+      sessionId: quiz.sessionId,
+      questionId: current.id
+    });
+
     expect(result.explanationSource).toBe("ai");
-    expect(result.explanation).toContain("题目在考什么");
+    expect(result.explanation).toContain("reason");
+  });
+
+  it("includes all answered questions in the final summary", async () => {
+    const quiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-be-verb", questionCount: 2 });
+    const first = quiz.currentQuestion!;
+    const firstSubmit = await submitQuizAnswer({
+      sessionId: quiz.sessionId,
+      questionId: first.id,
+      userAnswer: "wrong"
+    });
+
+    const second = firstSubmit.nextQuestion!;
+    const finalSubmit = await submitQuizAnswer({
+      sessionId: quiz.sessionId,
+      questionId: second.id,
+      userAnswer: "wrong"
+    });
+
+    expect(finalSubmit.summary?.items).toHaveLength(2);
+    expect(finalSubmit.summary?.items.map((item) => item.questionId)).toEqual([first.id, second.id]);
   });
 
   it("reuses cached AI explanations for the same answer context", async () => {
@@ -249,7 +294,7 @@ describe("quizService", () => {
     setExplanationGeneratorForTests(async () => {
       callCount += 1;
       return {
-        explanation: "1. 这题在考什么：考介词。\n2. 为什么这个答案对：Monday morning 要用 on。\n3. 下次怎么更快看出来：看到具体某一天就先想 on。",
+        explanation: "Cached AI explanation",
         explanationSource: "ai"
       };
     });
@@ -260,12 +305,20 @@ describe("quizService", () => {
       questionId: firstQuiz.currentQuestion!.id,
       userAnswer: "on"
     });
+    await requestQuizExplanation({
+      sessionId: firstQuiz.sessionId,
+      questionId: firstQuiz.currentQuestion!.id
+    });
 
     const secondQuiz = startQuiz({ mode: "knowledgePoint", knowledgePointId: "kp-preposition-time", questionCount: 1 });
-    const secondResult = await submitQuizAnswer({
+    await submitQuizAnswer({
       sessionId: secondQuiz.sessionId,
       questionId: secondQuiz.currentQuestion!.id,
       userAnswer: "on"
+    });
+    const secondResult = await requestQuizExplanation({
+      sessionId: secondQuiz.sessionId,
+      questionId: secondQuiz.currentQuestion!.id
     });
 
     expect(callCount).toBe(1);

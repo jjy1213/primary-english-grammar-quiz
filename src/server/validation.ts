@@ -63,6 +63,11 @@ export const submitQuizSchema = z.object({
   userAnswer: z.string()
 });
 
+export const requestExplanationSchema = z.object({
+  sessionId: z.string().min(1),
+  questionId: z.string().min(1)
+});
+
 export const loginSchema = z.object({
   username: z.string().min(1),
   password: z.string().min(1)

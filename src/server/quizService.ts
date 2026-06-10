@@ -7,6 +7,7 @@ import type {
   KnowledgePoint,
   PublicQuestion,
   Question,
+  QuizExplanationResponse,
   QuizQuestionPayload,
   QuizSession,
   QuestionTypeFilter,
@@ -203,13 +204,6 @@ export async function submitQuizAnswer(input: {
 
   const correctAnswerLabel = getChoiceAnswerLabel(question, question.answer);
   const isCorrect = isAnswerCorrect(question, input.userAnswer);
-  const explanationResult = await buildExplanation({
-    question,
-    knowledgePoint,
-    userAnswer: input.userAnswer,
-    isCorrect,
-    correctAnswerLabel
-  });
 
   if (isCorrect) {
     session.correctCount += 1;
@@ -238,38 +232,31 @@ export async function submitQuizAnswer(input: {
 
   if (isFinished) {
     session.completedAt = new Date().toISOString();
-    const incorrectEntries = session.questionIds
+    const allEntries = session.questionIds
       .map((questionId) => questionMap.get(questionId)!)
       .map((item) => {
         const relatedAttempt = session.answers.find((answer) => answer.questionId === item.id);
         return { item, relatedAttempt };
-      })
-      .filter((entry) => !(entry.relatedAttempt?.isCorrect ?? false));
+      });
 
     const items = await Promise.all(
-      incorrectEntries.map(async (entry) => {
+      allEntries.map(async (entry) => {
         const summaryKnowledgePoint = knowledgeMap.get(entry.item.knowledgePointId)!;
-        const summaryExplanation = await buildExplanation({
-          question: entry.item,
-          knowledgePoint: summaryKnowledgePoint,
-          userAnswer: entry.relatedAttempt?.userAnswer ?? "",
-          isCorrect: entry.relatedAttempt?.isCorrect ?? false,
-          correctAnswerLabel: getChoiceAnswerLabel(entry.item, entry.item.answer)
-        });
 
         return {
           questionId: entry.item.id,
           stem: entry.item.stem,
           sourceType: entry.item.sourceType,
           options: entry.item.options,
+          wordBox: entry.item.wordBox,
           examSource: entry.item.examSource,
           userAnswer: entry.relatedAttempt?.userAnswer ?? "",
           isCorrect: entry.relatedAttempt?.isCorrect ?? false,
           correctAnswer: entry.item.answer,
           correctAnswerLabel: getChoiceAnswerLabel(entry.item, entry.item.answer),
           knowledgePointName: summaryKnowledgePoint.name,
-          explanation: summaryExplanation.explanation,
-          explanationSource: summaryExplanation.explanationSource
+          explanation: entry.item.explanation,
+          explanationSource: "fallback" as const
         };
       })
     );
@@ -290,8 +277,6 @@ export async function submitQuizAnswer(input: {
     isCorrect,
     correctAnswer: question.answer,
     correctAnswerLabel,
-    explanation: explanationResult.explanation,
-    explanationSource: explanationResult.explanationSource,
     knowledgePoint,
     userAnswer: input.userAnswer,
     question: toQuizQuestionPayload(question, knowledgePoint),
@@ -303,5 +288,53 @@ export async function submitQuizAnswer(input: {
     nextQuestion,
     isFinished,
     summary
+  };
+}
+
+export async function requestQuizExplanation(input: {
+  sessionId: string;
+  questionId: string;
+}): Promise<QuizExplanationResponse> {
+  const session = sessions.get(input.sessionId);
+  if (!session) {
+    throw new Error("Quiz session not found.");
+  }
+
+  const answerEntry = session.answers.find((entry) => entry.questionId === input.questionId);
+  if (!answerEntry) {
+    throw new Error("No submitted answer found for this question.");
+  }
+
+  const questionMap = getQuestionMap();
+  const knowledgeMap = getKnowledgeMap();
+  const question = questionMap.get(input.questionId);
+  if (!question) {
+    throw new Error("Question not found.");
+  }
+
+  const knowledgePoint = knowledgeMap.get(question.knowledgePointId);
+  if (!knowledgePoint) {
+    throw new Error("Knowledge point not found.");
+  }
+
+  const correctAnswerLabel = getChoiceAnswerLabel(question, question.answer);
+  const explanationResult = await buildExplanation({
+    question,
+    knowledgePoint,
+    userAnswer: answerEntry.userAnswer,
+    isCorrect: answerEntry.isCorrect,
+    correctAnswerLabel
+  });
+
+  return {
+    sessionId: session.id,
+    questionId: question.id,
+    userAnswer: answerEntry.userAnswer,
+    isCorrect: answerEntry.isCorrect,
+    correctAnswer: question.answer,
+    correctAnswerLabel,
+    explanation: explanationResult.explanation,
+    explanationSource: explanationResult.explanationSource,
+    knowledgePoint
   };
 }

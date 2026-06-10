@@ -1,0 +1,27 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="space" x1="176" y1="72" x2="1488" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3F7FF"/>
+      <stop offset="0.55" stop-color="#D9E6FF"/>
+      <stop offset="1" stop-color="#C4F8FF"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="800" y1="146" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#6AD8FF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#space)"/>
+  <g opacity="0.55" fill="#FFFFFF">
+    <circle cx="190" cy="130" r="2.8"/>
+    <circle cx="348" cy="236" r="2.4"/>
+    <circle cx="522" cy="148" r="3"/>
+    <circle cx="982" cy="174" r="3.2"/>
+    <circle cx="1144" cy="262" r="2.6"/>
+    <circle cx="1410" cy="126" r="3"/>
+  </g>
+  <path d="M780 138L990 900H610L780 138Z" fill="url(#beam)"/>
+  <path d="M0 786C170 748 356 730 534 742C688 752 776 802 944 806C1130 810 1288 748 1454 740C1508 738 1556 740 1600 746V900H0V786Z" fill="#A5B8D8" opacity="0.42"/>
+  <path d="M510 714L708 560" stroke="#FF8A9A" stroke-width="18" stroke-linecap="round" opacity="0.8"/>
+  <path d="M1090 714L892 560" stroke="#FF8A9A" stroke-width="18" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="800" cy="520" r="96" fill="#EAF7FF" opacity="0.5"/>
+</svg>

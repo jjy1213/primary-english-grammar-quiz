@@ -1,0 +1,29 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="forestSky" x1="156" y1="48" x2="1480" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E6FFE0"/>
+      <stop offset="1" stop-color="#D6EEFF"/>
+    </linearGradient>
+    <linearGradient id="forestFloor" x1="800" y1="560" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8DD48B"/>
+      <stop offset="1" stop-color="#3C9056"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#forestSky)"/>
+  <path d="M0 650C96 604 214 580 334 590C466 602 564 656 690 666C860 680 988 604 1168 612C1336 620 1458 700 1600 674V900H0V650Z" fill="url(#forestFloor)"/>
+  <path d="M0 760C152 720 278 718 404 742C528 766 632 810 782 812C954 814 1082 744 1240 738C1360 734 1476 756 1600 742V900H0V760Z" fill="#4B9A61"/>
+  <g fill="#2F6C44" opacity="0.8">
+    <rect x="170" y="220" width="24" height="300" rx="12"/>
+    <rect x="420" y="190" width="28" height="352" rx="14"/>
+    <rect x="1240" y="206" width="28" height="338" rx="14"/>
+    <rect x="1420" y="236" width="22" height="288" rx="11"/>
+  </g>
+  <g fill="#5FAA69">
+    <circle cx="182" cy="220" r="84"/>
+    <circle cx="434" cy="190" r="102"/>
+    <circle cx="1254" cy="206" r="96"/>
+    <circle cx="1432" cy="236" r="78"/>
+  </g>
+  <path d="M734 324L774 264L826 336L874 262L938 360H734V324Z" fill="#EEF8FF" opacity="0.75"/>
+  <path d="M968 262L1022 190L1098 288H968V262Z" fill="#EEF8FF" opacity="0.75"/>
+</svg>

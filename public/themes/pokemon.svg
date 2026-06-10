@@ -1,0 +1,24 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="journey" x1="180" y1="60" x2="1432" y2="888" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7C8"/>
+      <stop offset="0.54" stop-color="#E4F1FF"/>
+      <stop offset="1" stop-color="#BFE3A0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#journey)"/>
+  <path d="M0 668C190 636 370 628 546 652C694 672 814 716 990 710C1180 704 1362 638 1600 660V900H0V668Z" fill="#9CD47F"/>
+  <path d="M0 770C208 738 414 736 620 760C780 778 930 818 1106 816C1280 814 1432 780 1600 784V900H0V770Z" fill="#70BA66"/>
+  <circle cx="1160" cy="172" r="78" fill="#FFF3A6"/>
+  <g transform="translate(310 212)">
+    <circle cx="0" cy="0" r="104" fill="#FFFFFF" opacity="0.9"/>
+    <path d="M-104 0H104" stroke="#2F3440" stroke-width="18"/>
+    <path d="M0 -104A104 104 0 0 1 104 0H-104A104 104 0 0 1 0 -104Z" fill="#FF717F"/>
+    <circle cx="0" cy="0" r="34" fill="#FFFFFF" stroke="#2F3440" stroke-width="16"/>
+  </g>
+  <g opacity="0.55">
+    <circle cx="1248" cy="556" r="24" fill="#FFD454"/>
+    <circle cx="1316" cy="602" r="18" fill="#FF7E89"/>
+    <circle cx="1120" cy="620" r="16" fill="#7BC7FF"/>
+  </g>
+</svg>

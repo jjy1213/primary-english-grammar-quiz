@@ -5,8 +5,8 @@ import { appConfig } from "./config.js";
 import { getAttemptById } from "./attemptStore.js";
 import { getAiRuntimeStatus } from "./aiExplanationService.js";
 import { login } from "./authService.js";
-import { getKnowledgePoints, getQuestions, startQuiz, submitQuizAnswer } from "./quizService.js";
-import { loginSchema, startQuizSchema, submitQuizSchema } from "./validation.js";
+import { getKnowledgePoints, getQuestions, requestQuizExplanation, startQuiz, submitQuizAnswer } from "./quizService.js";
+import { loginSchema, requestExplanationSchema, startQuizSchema, submitQuizSchema } from "./validation.js";
 
 ensureAppFiles();
 
@@ -90,6 +90,22 @@ app.post("/api/quiz/submit", async (req, res) => {
   } catch (error) {
     res.status(400).json({
       error: error instanceof Error ? error.message : "Unable to submit answer."
+    });
+  }
+});
+
+app.post("/api/quiz/explanation", async (req, res) => {
+  const parsed = requestExplanationSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.flatten() });
+    return;
+  }
+
+  try {
+    res.json(await requestQuizExplanation(parsed.data));
+  } catch (error) {
+    res.status(400).json({
+      error: error instanceof Error ? error.message : "Unable to generate explanation."
     });
   }
 });
